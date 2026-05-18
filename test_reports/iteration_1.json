@@ -1,0 +1,33 @@
+{
+  "summary": "MARILÓ Café fullstack testing: 15/15 backend pytest cases passed (auth, menu/products/gallery/recipes CRUD, settings). Frontend homepage renders all sections with correct data-testids; admin login/logout/dashboard fully functional with menu CRUD verified end-to-end. One critical routing bug found in admin NavLink relative paths.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "AdminDashboard sidebar", "issue": "NavLink uses relative `to` props (e.g. to='galeria'), so clicking from /admin/menu produces /admin/menu/galeria → /admin/menu/galeria/ajustes (path concatenation), navigating to non-existent routes that render blank content. Should use absolute paths like to='/admin/galeria' or restructure routes.", "selector": "[data-testid='admin-nav-gallery']", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "HomePage menu list", "issues": ["Individual menu items do not have data-testid attributes (e.g. menu-item-{id}); only the section container has menu-section testid. Considered minor since content renders correctly."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_marilo_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Fix AdminDashboard sidebar NavLinks: use absolute paths (e.g. to='/admin/menu', to='/admin/galeria') so cross-section navigation works without URL path concatenation.",
+    "(Optional) Add data-testid to individual menu/product/gallery cards on the public homepage for better future testability."
+  ],
+  "critical_code_review_comments": [
+    "Admin nav routing uses relative NavLink paths causing URL concatenation bug across sections - HIGH priority.",
+    "JWT_SECRET read at import time via os.environ['JWT_SECRET'] - will crash on missing env, which is intentional (fail-fast), good.",
+    "Admin password is auto-synced from .env on startup if changed - good seed behavior matching playbook.",
+    "Settings endpoint auto-seeds defaults on first GET - good.",
+    "Recipes list endpoint correctly excludes pdf_data to keep payload light; detail endpoint returns full PDF - verified working."
+  ],
+  "updated_files": ["/app/backend/tests/test_marilo_api.py"],
+  "success_rate": {"backend": "100%", "frontend": "90%"},
+  "test_credentials": "admin@marilo.cafe / admin123 (working, verified via /api/auth/login)",
+  "seed_data_creation": "None permanently created (TEST_NewItem menu item created during admin UI test then deleted via API cleanup).",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend test file at /app/backend/tests/test_marilo_api.py covers all 15 critical API flows including auth, CRUD for menu/products/gallery/recipes, settings update. Run with: pytest /app/backend/tests/test_marilo_api.py -v. Admin dashboard sidebar uses react-router NavLink with relative `to` paths (in /app/frontend/src/pages/AdminDashboard.jsx line 14-17). After E1 fixes to absolute paths, re-test admin cross-tab navigation. Public homepage has all required testids: nav-home/menu/shop/recipes/gallery/location, hero-cta-menu, menu-section, tiendita-section, recipe-shelf-section, gallery-section, location-map, footer-contact, instagram-follow-btn - all confirmed present.",
+  "rca of the issue": "AdminDashboard sidebar nav uses NAV array with `to: 'menu'`, `to: 'galeria'` etc passed to react-router NavLink. NavLink resolves relative paths against current location, so from /admin/menu, to='galeria' resolves to /admin/menu/galeria (not /admin/galeria). Routes are likely defined as children of /admin in App.jsx but relative navigation across siblings requires either absolute path (to='/admin/galeria') or `to='../galeria'`. Fix: change NAV entries to absolute paths or use end={true} with start-relative paths."
+}
