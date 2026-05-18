@@ -1,0 +1,194 @@
+{
+  "project_name": "MARILÓ Cafe",
+  "theme": "light",
+  "archetype": "1 (Organic & Earthy)",
+  "vibe": "Bohemian, artisanal, rustic, cozy",
+  "design_tokens": {
+    "colors": {
+      "background": "#F8F5F0",
+      "foreground": "#382A24",
+      "card": "#EFE9DF",
+      "card-foreground": "#382A24",
+      "popover": "#EFE9DF",
+      "popover-foreground": "#382A24",
+      "primary": "#B06D53",
+      "primary-foreground": "#FFFFFF",
+      "secondary": "#7A8974",
+      "secondary-foreground": "#FFFFFF",
+      "muted": "#E6DFD4",
+      "muted-foreground": "#6B5C53",
+      "accent": "#D8BCA8",
+      "accent-foreground": "#382A24",
+      "destructive": "#A43939",
+      "destructive-foreground": "#FFFFFF",
+      "border": "#D1C7BB",
+      "input": "#D1C7BB",
+      "ring": "#B06D53"
+    },
+    "typography": {
+      "fonts": {
+        "heading": "Cormorant Garamond, serif",
+        "body": "Karla, sans-serif"
+      },
+      "import_url": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap",
+      "scale": {
+        "h1": "text-5xl sm:text-6xl+ tracking-tight font-medium",
+        "h2": "text-3xl sm:text-4xl tracking-tight font-medium",
+        "h3": "text-xl sm:text-2xl font-medium",
+        "body": "text-base leading-relaxed"
+      }
+    },
+    "spacing": {
+      "container": "max-w-7xl mx-auto px-6 sm:px-12 lg:px-24",
+      "section_gap": "py-24 sm:py-32"
+    },
+    "border_radius": "rounded-xl"
+  },
+  "layout_strategies": {
+    "general": "Embrace negative space and asymmetric bento layouts. Avoid generic centered alignment.",
+    "hero": "Full height with subtle parallax image, gradient overlay bg-black/30 for readability. Incorporate a slow organic Marquee component (react-fast-marquee) at the bottom.",
+    "admin": "Standard sidebar dashboard utilizing Shadcn components. Sharp, data-dense, functional but themed with brand colors."
+  },
+  "component_rules": {
+    "marketing": "Use pure HTML/Tailwind for expressive sections. Avoid Shadcn cards for marketing; use raw divs with soft borders. Keep interactive elements easily identifiable.",
+    "dashboard": "Always use Shadcn components (Table, Input, Button, Dialog) configured with custom CSS variables.",
+    "icons": "lucide-react",
+    "motion": "framer-motion for page transitions and scroll triggers (staggered fade-ins)."
+  },
+  "media_urls": [
+    {
+      "category": "hero_background",
+      "url": "https://static.prod-images.emergentagent.com/jobs/2c8c7351-1d32-4d6c-aa89-3bc9598401bf/images/b1540473a07df519af6283012d2adb0c5225f0e576585d639754d42ee6aa120f.png",
+      "description": "Warm, rustic bohemian cafe interior at golden hour."
+    },
+    {
+      "category": "recipe_shelf_background",
+      "url": "https://static.prod-images.emergentagent.com/jobs/2c8c7351-1d32-4d6c-aa89-3bc9598401bf/images/14458c4bd34f6c40460550bddc655862e80e27194821d4d5eb5d7b9cd72d109b.png",
+      "description": "Flat lay of handwritten recipe cards."
+    },
+    {
+      "category": "gallery_interior_1",
+      "url": "https://images.unsplash.com/photo-1712630514718-3830cc6c0d0a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwzfHxydXN0aWMlMjBjYWZlJTIwaW50ZXJpb3IlMjB3YXJtJTIwbGlnaHRpbmd8ZW58MHx8fHwxNzc5MDY0NTE5fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Rustic wooden table interior."
+    },
+    {
+      "category": "gallery_interior_2",
+      "url": "https://images.unsplash.com/photo-1578231177134-f1bbe379b054?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHw0fHxydXN0aWMlMjBjYWZlJTIwaW50ZXJpb3IlMjB3YXJtJTIwbGlnaHRpbmd8ZW58MHx8fHwxNzc5MDY0NTE5fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Empty tables in warm cafe."
+    },
+    {
+      "category": "gallery_pastry_1",
+      "url": "https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwxfHxhcnRpc2FuYWwlMjBjb2ZmZWUlMjBhbmQlMjBwYXN0cnl8ZW58MHx8fHwxNzc5MDY0NTIwfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Coffee surrounded by baked breads."
+    },
+    {
+      "category": "gallery_pastry_2",
+      "url": "https://images.unsplash.com/photo-1598022186152-1b66e6c38245?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwzfHxhcnRpc2FuYWwlMjBjb2ZmZWUlMjBhbmQlMjBwYXN0cnl8ZW58MHx8fHwxNzc5MDY0NTIwfDA&ixlib=rb-4.1.0&q=85",
+      "description": "White ceramic mug with cappuccino."
+    }
+  ],
+  "pages": [
+    {
+      "path": "/",
+      "sections": [
+        {
+          "name": "Navigation",
+          "description": "Sticky header with backdrop-blur-xl bg-white/70, 1px subtle inner border border-white/40. Logo centered (Cormorant Garamond). Links on sides.",
+          "data_testids": [
+            "nav-home",
+            "nav-menu",
+            "nav-location",
+            "nav-gallery",
+            "nav-shop"
+          ]
+        },
+        {
+          "name": "Hero Landing",
+          "description": "Full height. Uses 'hero_background'. Overlay bg-black/40. Large H1 'MARILÓ'. Call to action to view menu. Marquee at bottom (Editorial Ribbon): 'Artisanal Coffee • Fresh Pastries • Bohemian Soul'.",
+          "data_testids": [
+            "hero-cta-menu"
+          ]
+        },
+        {
+          "name": "Menu / Carta",
+          "description": "Split asymmetric layout. Not cards. Use raw HTML/Tailwind. Left side: category titles and pure text rows (Item.....Price). Right side: A lifestyle image of coffee (gallery_pastry_1).",
+          "data_testids": [
+            "menu-section",
+            "menu-category-coffee",
+            "menu-category-food"
+          ]
+        },
+        {
+          "name": "Tiendita (Store)",
+          "description": "Horizontal scroll or simple grid of physical items available in store (coffee beans, mugs). Minimalist display with soft shadows, beige background. Label: 'Available in our physical store'.",
+          "data_testids": [
+            "tiendita-section",
+            "tiendita-item-1"
+          ]
+        },
+        {
+          "name": "Recipe Shelf (Downloads)",
+          "description": "Bento grid layout. Background image 'recipe_shelf_background' on main bento item. Overlay with dark/light text. Buttons to download PDF recipes.",
+          "data_testids": [
+            "recipe-shelf-section",
+            "recipe-download-btn-1"
+          ]
+        },
+        {
+          "name": "Gallery & Instagram",
+          "description": "Masonry grid using all interior and pastry images. Floating central CTA button with an Instagram icon 'Follow @marilocafeteria'.",
+          "data_testids": [
+            "gallery-section",
+            "instagram-follow-btn"
+          ]
+        },
+        {
+          "name": "Location & Footer",
+          "description": "Split screen. Map embed (iframe) on one half, address, hours, and contact on the other half. Warm earthy footer with large 'MARILÓ' logo.",
+          "data_testids": [
+            "location-map",
+            "footer-contact"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin",
+      "sections": [
+        {
+          "name": "Login",
+          "description": "Simple centered login card. Shadcn Card, Input, Button.",
+          "data_testids": [
+            "admin-login-email",
+            "admin-login-password",
+            "admin-login-submit"
+          ]
+        },
+        {
+          "name": "Dashboard Shell",
+          "description": "Sidebar navigation (Menu, Gallery, Tiendita, Recipes). Topbar with logout.",
+          "data_testids": [
+            "admin-nav-menu",
+            "admin-nav-gallery",
+            "admin-logout"
+          ]
+        },
+        {
+          "name": "Content Management",
+          "description": "Shadcn Tables for listing items. Shadcn Dialogs for Add/Edit. Forms with Shadcn Inputs/Selects.",
+          "data_testids": [
+            "admin-add-item-btn",
+            "admin-table-row",
+            "admin-edit-submit"
+          ]
+        }
+      ]
+    }
+  ],
+  "accessibility": {
+    "contrast": "Ensure minimum 4.5:1 ratio for standard text, 3:1 for large text against all backgrounds.",
+    "focus": "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
+    "reduced_motion": "Respect prefers-reduced-motion for framer-motion variants."
+  },
+  "instructions_to_main_agent": "1. Set up Tailwind CSS with the defined color palette and typography. Add font imports to index.css. 2. Develop marketing site using pure HTML/Tailwind and framer-motion for animations. 3. Build Admin panel using Shadcn components (install necessary ones like button, input, card, dialog, table). 4. ALWAYS include the provided data-testids on interactive elements. 5. Use the provided media URLs, NO placeholders. 6. Build in .js/.jsx, DO NOT use TypeScript (.tsx). 7. Include react-fast-marquee and framer-motion."
+}
