@@ -424,6 +424,43 @@ async def delete_subscriber(sub_id: str, current=Depends(get_current_admin)):
     return {"ok": True}
 
 
+class RedeemRequest(BaseModel):
+    code: str
+
+
+@api_router.post("/coupons/redeem")
+async def redeem_coupon(req: RedeemRequest, current=Depends(get_current_admin)):
+    code = req.code.strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="Código vacío")
+    sub = await db.subscribers.find_one({"coupon": code}, {"_id": 0})
+    if not sub:
+        raise HTTPException(status_code=404, detail="Cupón no encontrado")
+    if sub.get("redeemed"):
+        return {
+            "ok": False,
+            "already_redeemed": True,
+            "subscriber": sub,
+            "message": f"Este cupón ya se canjeó el {sub.get('redeemed_at', '?')[:10]}",
+        }
+    now = datetime.now(timezone.utc).isoformat()
+    await db.subscribers.update_one(
+        {"coupon": code},
+        {"$set": {"redeemed": True, "redeemed_at": now, "redeemed_by": current.get("email", "")}},
+    )
+    sub["redeemed"] = True
+    sub["redeemed_at"] = now
+    return {"ok": True, "already_redeemed": False, "subscriber": sub, "message": "Cupón canjeado con éxito"}
+
+
+@api_router.get("/coupons/stats")
+async def coupon_stats(current=Depends(get_current_admin)):
+    total = await db.subscribers.count_documents({})
+    redeemed = await db.subscribers.count_documents({"redeemed": True})
+    rate = round((redeemed / total) * 100, 1) if total else 0.0
+    return {"total": total, "redeemed": redeemed, "pending": total - redeemed, "conversion_rate": rate}
+
+
 # ---------------------------------------------------------------
 # App configuration
 # ---------------------------------------------------------------
