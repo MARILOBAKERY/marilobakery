@@ -10,11 +10,11 @@ import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import SettingsAdmin from "@/components/admin/SettingsAdmin";
 
 const NAV = [
-  { to: "menu", label: "Carta", icon: Coffee, testid: "admin-nav-menu" },
-  { to: "tiendita", label: "Tiendita", icon: ShoppingBag, testid: "admin-nav-tiendita" },
-  { to: "recetas", label: "Recetas (PDFs)", icon: FileText, testid: "admin-nav-recipes" },
-  { to: "galeria", label: "Galería", icon: ImageIcon, testid: "admin-nav-gallery" },
-  { to: "ajustes", label: "Ajustes", icon: SettingsIcon, testid: "admin-nav-settings" },
+  { to: "/admin/menu", label: "Carta", icon: Coffee, testid: "admin-nav-menu" },
+  { to: "/admin/tiendita", label: "Tiendita", icon: ShoppingBag, testid: "admin-nav-tiendita" },
+  { to: "/admin/recetas", label: "Recetas (PDFs)", icon: FileText, testid: "admin-nav-recipes" },
+  { to: "/admin/galeria", label: "Galería", icon: ImageIcon, testid: "admin-nav-gallery" },
+  { to: "/admin/ajustes", label: "Ajustes", icon: SettingsIcon, testid: "admin-nav-settings" },
 ];
 
 export default function AdminDashboard() {
