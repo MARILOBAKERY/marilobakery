@@ -2,18 +2,20 @@ import { useState } from "react";
 import { Routes, Route, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { Coffee, ImageIcon, FileText, ShoppingBag, Settings as SettingsIcon, LogOut, Home } from "lucide-react";
+import { Coffee, ImageIcon, FileText, ShoppingBag, Settings as SettingsIcon, LogOut, Home, Users } from "lucide-react";
 import MenuAdmin from "@/components/admin/MenuAdmin";
 import GalleryAdmin from "@/components/admin/GalleryAdmin";
 import RecipesAdmin from "@/components/admin/RecipesAdmin";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import SettingsAdmin from "@/components/admin/SettingsAdmin";
+import SubscribersAdmin from "@/components/admin/SubscribersAdmin";
 
 const NAV = [
   { to: "/admin/menu", label: "Carta", icon: Coffee, testid: "admin-nav-menu" },
   { to: "/admin/tiendita", label: "Tiendita", icon: ShoppingBag, testid: "admin-nav-tiendita" },
   { to: "/admin/recetas", label: "Recetas (PDFs)", icon: FileText, testid: "admin-nav-recipes" },
   { to: "/admin/galeria", label: "Galería", icon: ImageIcon, testid: "admin-nav-gallery" },
+  { to: "/admin/suscriptores", label: "Suscriptores", icon: Users, testid: "admin-nav-subs" },
   { to: "/admin/ajustes", label: "Ajustes", icon: SettingsIcon, testid: "admin-nav-settings" },
 ];
 
@@ -88,6 +90,7 @@ export default function AdminDashboard() {
           <Route path="tiendita" element={<ProductsAdmin />} />
           <Route path="recetas" element={<RecipesAdmin />} />
           <Route path="galeria" element={<GalleryAdmin />} />
+          <Route path="suscriptores" element={<SubscribersAdmin />} />
           <Route path="ajustes" element={<SettingsAdmin />} />
         </Routes>
       </main>

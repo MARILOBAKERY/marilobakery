@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Instagram, MapPin, Phone, Clock, Mail, Download, ArrowRight, ChevronDown, Coffee, Facebook, MessageCircle, Menu as MenuIcon, X } from "lucide-react";
 import { api, API } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import SubscribeSection from "@/components/SubscribeSection";
 
 const HERO_IMG = "https://static.prod-images.emergentagent.com/jobs/2c8c7351-1d32-4d6c-aa89-3bc9598401bf/images/b1540473a07df519af6283012d2adb0c5225f0e576585d639754d42ee6aa120f.png";
 const RECIPE_BG = "https://static.prod-images.emergentagent.com/jobs/2c8c7351-1d32-4d6c-aa89-3bc9598401bf/images/14458c4bd34f6c40460550bddc655862e80e27194821d4d5eb5d7b9cd72d109b.png";
@@ -71,6 +72,7 @@ export default function HomePage() {
                   { id: "tiendita", l: "Tiendita" },
                   { id: "recetas", l: "Recetas" },
                   { id: "gallery", l: "Galería" },
+                  { id: "suscribete", l: "Café Gratis" },
                   { id: "location", l: "Visítanos" },
                 ].map((m) => (
                   <button key={m.id} onClick={() => scrollTo(m.id)} className="text-left py-3 border-b border-border/40 uppercase tracking-wide text-sm hover:text-primary">{m.l}</button>
@@ -275,6 +277,8 @@ export default function HomePage() {
       </section>
 
       {/* LOCATION + FOOTER */}
+      <SubscribeSection />
+
       <section id="location" className="bg-foreground text-background">
         <div className="grid lg:grid-cols-2">
           <div className="aspect-square lg:aspect-auto min-h-[300px] sm:min-h-[400px] relative" data-testid="location-map">

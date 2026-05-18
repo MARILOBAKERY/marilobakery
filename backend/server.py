@@ -12,6 +12,10 @@ from typing import List, Optional
 
 import jwt
 import bcrypt
+import asyncio
+import secrets
+import string
+import resend
 from fastapi import FastAPI, APIRouter, HTTPException, Request, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.cors import CORSMiddleware
@@ -30,6 +34,13 @@ JWT_ALGORITHM = "HS256"
 JWT_EXP_HOURS = 24 * 7  # 7 days for admin convenience
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@marilo.cafe')
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
+
+# Resend (email)
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+CAFE_NAME = os.environ.get('CAFE_NAME', 'MARILÓ')
+if RESEND_API_KEY:
+    resend.api_key = RESEND_API_KEY
 
 app = FastAPI(title="MARILÓ Café API")
 api_router = APIRouter(prefix="/api")
@@ -329,6 +340,88 @@ async def delete_product(product_id: str, current=Depends(get_current_admin)):
 @api_router.get("/")
 async def root():
     return {"app": "MARILÓ Café", "status": "ok"}
+
+
+# ---------------------------------------------------------------
+# Subscribers / Newsletter
+# ---------------------------------------------------------------
+class SubscribeRequest(BaseModel):
+    email: EmailStr
+    name: str = ""
+
+
+def _gen_coupon() -> str:
+    return "MARILO-" + "".join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+
+
+def _build_coupon_html(name: str, coupon: str) -> str:
+    greet = name.strip() or "amiga/o de MARILÓ"
+    return f"""
+<!doctype html><html><body style="margin:0;background:#F8F5F0;font-family:Georgia,serif;color:#382A24">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#F8F5F0;padding:40px 16px">
+    <tr><td align="center">
+      <table role="presentation" width="540" cellspacing="0" cellpadding="0" style="max-width:540px;background:#EFE9DF;border-radius:16px;padding:48px 36px;text-align:center">
+        <tr><td>
+          <p style="margin:0 0 8px;letter-spacing:6px;text-transform:uppercase;font-size:11px;color:#6B5C53;font-family:Arial,sans-serif">— Cafetería de barrio</p>
+          <h1 style="margin:0 0 18px;font-size:48px;letter-spacing:-1px;color:#382A24">{CAFE_NAME}</h1>
+          <p style="margin:0 0 22px;font-size:18px;line-height:1.5;color:#382A24">¡Hola, {greet}! Gracias por unirte a nuestra comunidad.</p>
+          <p style="margin:0 0 28px;font-size:15px;line-height:1.6;color:#6B5C53;font-family:Arial,sans-serif">Te invitamos un café a la casa. Muestra este código en tu próxima visita:</p>
+          <div style="display:inline-block;background:#B06D53;color:#fff;padding:18px 32px;border-radius:999px;letter-spacing:4px;font-weight:600;font-family:Arial,sans-serif;font-size:18px">{coupon}</div>
+          <p style="margin:32px 0 0;font-size:12px;color:#6B5C53;font-family:Arial,sans-serif">Válido por una bebida caliente. Hasta pronto.</p>
+          <p style="margin:24px 0 0;font-style:italic;color:#382A24;font-size:14px">— Con cariño, el equipo de {CAFE_NAME}</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>
+"""
+
+
+@api_router.post("/subscribe")
+async def subscribe(req: SubscribeRequest):
+    email = req.email.lower().strip()
+    existing = await db.subscribers.find_one({"email": email})
+    if existing:
+        # idempotent: return existing coupon, do not re-send to avoid abuse
+        return {"ok": True, "already_subscribed": True, "coupon": existing.get("coupon", "")}
+
+    coupon = _gen_coupon()
+    doc = {
+        "id": str(uuid.uuid4()),
+        "email": email,
+        "name": req.name.strip(),
+        "coupon": coupon,
+        "email_sent": False,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+    if RESEND_API_KEY:
+        params = {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": f"¡Un café a la casa en {CAFE_NAME}!",
+            "html": _build_coupon_html(req.name, coupon),
+        }
+        try:
+            await asyncio.to_thread(resend.Emails.send, params)
+            doc["email_sent"] = True
+        except Exception as e:
+            logger.error(f"Resend failed: {e}")
+            # We still save the subscriber so admin can follow up manually
+    await db.subscribers.insert_one(doc)
+    return {"ok": True, "already_subscribed": False, "coupon": coupon, "email_sent": doc["email_sent"]}
+
+
+@api_router.get("/subscribers")
+async def list_subscribers(current=Depends(get_current_admin)):
+    items = await db.subscribers.find({}, {"_id": 0}).sort("created_at", -1).to_list(2000)
+    return items
+
+
+@api_router.delete("/subscribers/{sub_id}")
+async def delete_subscriber(sub_id: str, current=Depends(get_current_admin)):
+    await db.subscribers.delete_one({"id": sub_id})
+    return {"ok": True}
 
 
 # ---------------------------------------------------------------
