@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import HomePage from "@/pages/HomePage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
+import InstallPWA from "@/components/InstallPWA";
 
 const ProtectedRoute = ({ children }) => {
   const { user, ready } = useAuth();
@@ -31,6 +32,7 @@ function App() {
             />
           </Routes>
           <Toaster richColors position="top-right" />
+          <InstallPWA />
         </AuthProvider>
       </BrowserRouter>
     </div>
