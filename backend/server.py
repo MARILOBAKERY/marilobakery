@@ -172,16 +172,16 @@ class ProductCreate(BaseModel):
 
 
 class CafeSettings(BaseModel):
-    address: str = "Calle Imaginaria 123, Tu Ciudad"
-    phone: str = "+00 000 000 000"
-    whatsapp: str = "+00 000 000 000"
+    address: str = "Transmetropolitana 11, San Andrés Totoltepec, Tlalpan, 14400 Ciudad de México, CDMX, México"
+    phone: str = "+52 56 1984 8299"
+    whatsapp: str = "+52 56 1984 8299"
     email: str = "hola@marilo.cafe"
     hours: str = "Lun - Vie: 8:00 - 20:00\nSáb - Dom: 9:00 - 22:00"
-    instagram_url: str = "https://instagram.com/marilocafeteria"
-    instagram_handle: str = "@marilocafeteria"
-    facebook_url: str = ""
-    map_embed_url: str = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.012345!2d-99.1332!3d19.4326!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sCDMX!5e0!3m2!1ses!2smx!4v0"
-    tagline: str = "Café Artesanal • Repostería Fresca • Alma Bohemia"
+    instagram_url: str = "https://instagram.com/marilobakerycoffee"
+    instagram_handle: str = "@marilobakerycoffee"
+    facebook_url: str = "https://facebook.com/marilobakerycoffee"
+    map_embed_url: str = "https://www.google.com/maps?q=Transmetropolitana+11,+San+Andres+Totoltepec,+Tlalpan,+14400+CDMX&output=embed"
+    tagline: str = "Cafetería con un toquesito Oaxaqueño"
 
 
 # ---------------------------------------------------------------

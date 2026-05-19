@@ -94,7 +94,19 @@ html, body {
     mix-blend-mode: multiply;
 }
 
-/* Neo-vintage card outlines & offset shadows */
+/* Painted card — soft asymmetric block with subtle shadow (replaces neo-brutalist style) */
+.painted-card {
+    border-radius: 18px;
+    box-shadow: 0 12px 28px -10px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+.painted-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px -10px rgba(0,0,0,0.18);
+}
+
+/* Decorative neo-brutalist (kept for sparing use) */
 .vintage-card {
     border: 2px solid #000;
     box-shadow: 6px 6px 0 0 #000;
@@ -107,6 +119,14 @@ html, body {
 .vintage-card-pink { background: var(--marilo-soft-pink); }
 .vintage-card-teal { background: var(--marilo-soft-teal); }
 .vintage-card-yellow { background: var(--marilo-yellow); }
+
+/* Painted dashed brushstroke border (used as section separator) */
+.brush-divider {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 24' preserveAspectRatio='none'%3E%3Cpath d='M0 12 Q 200 0 400 14 T 800 12 T 1200 12' stroke='%23f9557c' stroke-width='5' fill='none' stroke-linecap='round' stroke-dasharray='10 8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 30px;
+}
 
 /* Hand-drawn dotted divider */
 .divider-dots {
