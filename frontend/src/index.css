@@ -1,174 +1,113 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Allura&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Caveat+Brush&family=Quicksand:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================
-   MARILÓ — Vintage Oaxaca Pop palette
-   Pink #f9557c · Yellow #fdda25 · Teal #21dfc8
-   Soft pink #fde2eb / #ffb3cd · Soft teal #b2f0e8
+   MARILÓ — Bohemio Orgánico
+   Mostaza #fdda25 · Rosa coral #E27282
+   Azul polvo #8FBAC5 · Salvia #ADC388
    ============================================ */
 
 html, body {
     margin: 0;
     padding: 0;
-    background: #FFF6E9;
-    color: #1A1A1A;
-    font-family: 'Work Sans', 'Libre Baskerville', Georgia, serif;
+    background: #FFFAF1;
+    color: #000;
+    font-family: 'Quicksand', system-ui, -apple-system, sans-serif;
+    font-weight: 500;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
 }
 
-.font-display {
-    font-family: 'Anton', 'Impact', sans-serif;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-}
-
-.font-serif-display {
-    font-family: 'Libre Baskerville', Georgia, serif;
-    letter-spacing: -0.005em;
-}
-
 .font-script {
-    font-family: 'Allura', 'Pinyon Script', cursive;
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
     letter-spacing: 0;
+    line-height: 0.95;
 }
+.font-brush {
+    font-family: 'Caveat Brush', cursive;
+    letter-spacing: 0;
+    line-height: 0.95;
+}
+.font-display { font-family: 'Caveat', cursive; font-weight: 700; }
+.font-serif-display { font-family: 'Caveat', cursive; font-weight: 600; }
 
 @layer base {
     :root {
-        --background: 40 100% 96%;          /* #FFF6E9 cream */
-        --foreground: 0 0% 10%;             /* near black */
-        --card: 340 90% 94%;                /* #fde2eb soft pink */
-        --card-foreground: 0 0% 10%;
+        --background: 38 100% 97%;          /* #FFFAF1 */
+        --foreground: 0 0% 0%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 0%;
         --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 10%;
-        --primary: 340 92% 56%;             /* #f9557c pink */
+        --popover-foreground: 0 0% 0%;
+        --primary: 351 65% 67%;             /* #E27282 coral */
         --primary-foreground: 0 0% 100%;
-        --secondary: 172 73% 50%;           /* #21dfc8 teal */
-        --secondary-foreground: 0 0% 10%;
-        --muted: 340 100% 95%;              /* very light pink */
+        --secondary: 194 32% 67%;           /* #8FBAC5 dusty blue */
+        --secondary-foreground: 0 0% 0%;
+        --muted: 38 60% 94%;
         --muted-foreground: 0 0% 35%;
-        --accent: 51 98% 57%;               /* #fdda25 yellow */
-        --accent-foreground: 0 0% 10%;
+        --accent: 51 98% 57%;               /* #fdda25 mustard */
+        --accent-foreground: 0 0% 0%;
         --destructive: 0 70% 50%;
         --destructive-foreground: 0 0% 100%;
-        --border: 0 0% 10%;                 /* black borders (vintage) */
-        --input: 0 0% 75%;
-        --ring: 340 92% 56%;
-        --radius: 1rem;
+        --border: 38 30% 88%;
+        --input: 38 30% 88%;
+        --ring: 351 65% 67%;
+        --radius: 1.5rem;
 
-        /* Brand-named tokens for arbitrary use */
-        --marilo-pink: #f9557c;
         --marilo-yellow: #fdda25;
-        --marilo-teal: #21dfc8;
-        --marilo-soft-teal: #b2f0e8;
-        --marilo-soft-pink: #fde2eb;
-        --marilo-mid-pink: #ffb3cd;
-        --marilo-black: #000000;
-        --marilo-cream: #FFF6E9;
+        --marilo-coral: #E27282;
+        --marilo-blue: #8FBAC5;
+        --marilo-sage: #ADC388;
+        --marilo-cream: #FFFAF1;
+        --marilo-soft-coral: #F5C9CD;
+        --marilo-soft-blue: #D5E5EA;
+        --marilo-soft-sage: #DDE7CC;
+        --marilo-soft-yellow: #FFEFA0;
     }
 }
 
 @layer base {
     * { @apply border-border; }
     body { @apply bg-background text-foreground; }
-    h1, h2, h3, h4, h5, h6 {
-        font-family: 'Anton', 'Impact', sans-serif;
-        font-weight: 400;
-        letter-spacing: 0.01em;
-    }
+    h1, h2, h3, h4 { font-family: 'Caveat', cursive; font-weight: 700; letter-spacing: 0; }
 }
 
-/* Vintage paper/grain overlay */
-.grain::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    mix-blend-mode: multiply;
+/* Soft floating cards (ALPOJ style) */
+.soft-card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 18px 38px -16px rgba(0,0,0,0.12), 0 4px 10px -4px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+}
+.soft-card:hover { transform: translateY(-3px); }
+
+.tinted-card {
+    border-radius: 24px;
+    box-shadow: 0 12px 28px -12px rgba(0,0,0,0.10);
 }
 
-/* Painted card — soft asymmetric block with subtle shadow (replaces neo-brutalist style) */
-.painted-card {
-    border-radius: 18px;
-    box-shadow: 0 12px 28px -10px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
+/* Pretty pill button */
+.btn-pill {
+    border-radius: 999px;
+    padding: 0.85rem 1.75rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    transition: all 0.25s ease;
 }
-.painted-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 18px 36px -10px rgba(0,0,0,0.18);
-}
-
-/* Decorative neo-brutalist (kept for sparing use) */
-.vintage-card {
-    border: 2px solid #000;
-    box-shadow: 6px 6px 0 0 #000;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.vintage-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 8px 8px 0 0 #000;
-}
-.vintage-card-pink { background: var(--marilo-soft-pink); }
-.vintage-card-teal { background: var(--marilo-soft-teal); }
-.vintage-card-yellow { background: var(--marilo-yellow); }
-
-/* Painted dashed brushstroke border (used as section separator) */
-.brush-divider {
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 24' preserveAspectRatio='none'%3E%3Cpath d='M0 12 Q 200 0 400 14 T 800 12 T 1200 12' stroke='%23f9557c' stroke-width='5' fill='none' stroke-linecap='round' stroke-dasharray='10 8'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    height: 30px;
-}
-
-/* Hand-drawn dotted divider */
-.divider-dots {
-    height: 4px;
-    background-image: radial-gradient(circle, #000 1px, transparent 1.5px);
-    background-size: 14px 4px;
-    background-repeat: repeat-x;
-    background-position: 0 50%;
-}
+.btn-pill:hover { transform: translateY(-2px); box-shadow: 0 10px 18px -8px rgba(0,0,0,0.2); }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--marilo-soft-pink); }
-::-webkit-scrollbar-thumb { background: var(--marilo-pink); border-radius: 8px; border: 2px solid #fff; }
+::-webkit-scrollbar-track { background: var(--marilo-soft-coral); }
+::-webkit-scrollbar-thumb { background: var(--marilo-coral); border-radius: 8px; border: 2px solid #fff; }
 
-/* Selection */
 ::selection { background: var(--marilo-yellow); color: #000; }
 
-/* Focus */
-:focus-visible {
-    outline: 3px solid var(--marilo-pink);
-    outline-offset: 3px;
-    border-radius: 6px;
-}
-
-/* Sticker bouncy tag */
-.sticker {
-    display: inline-block;
-    transform: rotate(-3deg);
-    background: var(--marilo-yellow);
-    color: #000;
-    padding: 6px 14px;
-    border: 2px solid #000;
-    box-shadow: 3px 3px 0 0 #000;
-    font-family: 'Anton', sans-serif;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-/* Decorative wavy SVG used as section separator (use as background) */
-.wave-teal {
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q 150 0 300 20 T 600 20 T 900 20 T 1200 20 V 40 H 0 Z' fill='%2321dfc8'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
+:focus-visible { outline: 3px solid var(--marilo-coral); outline-offset: 3px; border-radius: 6px; }
