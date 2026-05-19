@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Caveat+Brush&family=Quicksand:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@400;500;600;700&family=Caveat+Brush&family=Quicksand:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -32,8 +32,13 @@ html, body {
     letter-spacing: 0;
     line-height: 0.95;
 }
-.font-display { font-family: 'Caveat', cursive; font-weight: 700; }
-.font-serif-display { font-family: 'Caveat', cursive; font-weight: 600; }
+.font-display {
+    font-family: 'Anton', 'Impact', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+}
+.font-serif-display { font-family: 'Anton', sans-serif; text-transform: uppercase; letter-spacing: 0.02em; }
 
 @layer base {
     :root {
@@ -73,7 +78,7 @@ html, body {
 @layer base {
     * { @apply border-border; }
     body { @apply bg-background text-foreground; }
-    h1, h2, h3, h4 { font-family: 'Caveat', cursive; font-weight: 700; letter-spacing: 0; }
+    h1, h2, h3, h4 { font-family: 'Anton', 'Impact', sans-serif; text-transform: uppercase; letter-spacing: 0.02em; font-weight: 400; }
 }
 
 /* Soft floating cards (ALPOJ style) */

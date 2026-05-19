@@ -41,7 +41,7 @@ export default function HomePage() {
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[var(--marilo-cream)]/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-4 flex items-center justify-between">
-          <button onClick={() => scrollTo("hero")} className="font-brush text-3xl text-[var(--marilo-coral)]" data-testid="nav-home">Mariló</button>
+          <button onClick={() => scrollTo("hero")} className="font-display text-3xl text-[var(--marilo-coral)] tracking-wide" data-testid="nav-home">MARILÓ</button>
           <div className="hidden md:flex items-center gap-7 text-[12px] tracking-wider uppercase font-semibold">
             <button onClick={() => scrollTo("menu")} className="hover:text-[var(--marilo-coral)] transition" data-testid="nav-menu">Carta</button>
             <button onClick={() => scrollTo("tiendita")} className="hover:text-[var(--marilo-coral)] transition" data-testid="nav-shop">Tiendita</button>
@@ -72,14 +72,19 @@ export default function HomePage() {
 
       {/* HERO */}
       <section id="hero" className="relative pt-24 sm:pt-28 pb-16 sm:pb-24 bg-[var(--marilo-cream)]">
-        <Blob1 className="absolute top-32 -left-10 w-56 opacity-50" color="#F5C9CD" />
-        <Blob2 className="absolute bottom-10 -right-10 w-72 opacity-40" color="#D5E5EA" />
-        <Squiggle className="absolute top-20 right-1/4 w-32 opacity-70" color="#ADC388" />
+        <Blob1 className="absolute top-32 -left-10 w-56 opacity-60" color="#F5C9CD" />
+        <Blob2 className="absolute bottom-10 -right-10 w-72 opacity-50" color="#D5E5EA" />
+        <Blob1 className="absolute top-44 right-20 w-28 opacity-70 rotate-12" color="#fdda25" />
+        <Blob2 className="absolute bottom-40 left-16 w-36 opacity-50" color="#ADC388" />
+        <Squiggle className="absolute top-20 right-1/4 w-32 opacity-90" color="#ADC388" />
+        <Squiggle className="absolute bottom-32 left-1/4 w-28 opacity-80" color="#fdda25" />
+        <Flower className="absolute top-44 left-1/4 w-10 opacity-90" />
+        <Dots className="absolute bottom-20 right-1/3 w-20 opacity-70" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-10 text-center">
           <p className="tracking-[0.4em] text-[11px] sm:text-xs text-black/60 mb-3 font-semibold uppercase">Cafetería con un toquesito Oaxaqueño</p>
-          <h1 className="font-brush text-[6rem] sm:text-[10rem] lg:text-[14rem] leading-[0.9] text-[var(--marilo-coral)]" data-testid="hero-title">
-            Mariló
+          <h1 className="font-display text-[5rem] sm:text-[9rem] lg:text-[13rem] leading-[0.85] text-[var(--marilo-coral)] tracking-wide" data-testid="hero-title">
+            MARILÓ
           </h1>
           <Squiggle className="mx-auto w-40 mt-2" color="#E27282" />
           <p className="font-script text-3xl sm:text-4xl lg:text-5xl mt-6 max-w-3xl mx-auto leading-tight text-black/85">
@@ -89,7 +94,7 @@ export default function HomePage() {
             <button onClick={() => scrollTo("menu")} data-testid="hero-cta-menu" className="btn-pill bg-[var(--marilo-coral)] text-white inline-flex items-center gap-2">
               Ver la carta <ArrowRight className="w-3.5 h-3.5" />
             </button>
-            <button onClick={() => scrollTo("location")} className="btn-pill bg-white text-black inline-flex items-center gap-2 border border-black/10">
+            <button onClick={() => scrollTo("location")} className="btn-pill bg-[#fdda25] text-black inline-flex items-center gap-2">
               Cómo llegar
             </button>
           </div>
@@ -97,14 +102,17 @@ export default function HomePage() {
 
         {/* Photo card floating */}
         <div className="relative z-10 mt-12 sm:mt-16 max-w-5xl mx-auto px-5 sm:px-10">
-          <div className="soft-card overflow-hidden">
+          <Blob1 className="absolute -top-8 -left-8 w-32 opacity-90" color="#fdda25" />
+          <Blob2 className="absolute -bottom-8 -right-8 w-40 opacity-80" color="#ADC388" />
+          <div className="soft-card overflow-hidden relative">
             <div className="grid sm:grid-cols-5">
               <div className="sm:col-span-3 aspect-[4/3] sm:aspect-auto">
-                <img src={HERO_IMG} alt="Mariló" className="w-full h-full object-cover" />
+                <img src={HERO_IMG} alt="MARILÓ" className="w-full h-full object-cover" />
               </div>
               <div className="sm:col-span-2 p-7 sm:p-10 flex flex-col justify-center relative" style={{ background: "var(--marilo-soft-coral)" }}>
                 <Flower className="absolute top-4 right-4 w-12 opacity-90" color="#fdda25" />
-                <h3 className="font-script text-4xl sm:text-5xl text-black leading-none mb-3">Bienvenida</h3>
+                <Dots className="absolute bottom-4 right-6 w-16 opacity-50" color="#E27282" />
+                <h3 className="font-display text-3xl sm:text-4xl text-black tracking-wide mb-3">BIENVENIDA</h3>
                 <p className="text-sm leading-relaxed">
                   Un rincón tierno donde el café, la repostería y la cocina oaxaqueña se encuentran. Pasa, siéntate y respira: ya estás en casa.
                 </p>
@@ -120,20 +128,27 @@ export default function HomePage() {
       </section>
 
       {/* Single color band */}
-      <div className="bg-[var(--marilo-coral)] text-white py-4 text-center">
-        <p className="font-brush tracking-wide text-2xl sm:text-3xl">~ hecho en oaxaca con cariño ~</p>
+      <div className="bg-[var(--marilo-coral)] text-white py-5 text-center relative overflow-hidden">
+        <Flower className="absolute top-1/2 -translate-y-1/2 left-8 w-8 opacity-90" color="#fdda25"/>
+        <Flower className="absolute top-1/2 -translate-y-1/2 right-8 w-8 opacity-90" color="#fdda25"/>
+        <p className="font-display tracking-[0.3em] text-base sm:text-lg">— HECHO EN OAXACA CON CARIÑO —</p>
       </div>
 
       {/* MENU */}
-      <section id="menu" data-testid="menu-section" className="py-16 sm:py-24 bg-[var(--marilo-cream)] relative">
-        <Blob1 className="absolute top-20 -right-10 w-60 opacity-30" color="#ADC388" />
+      <section id="menu" data-testid="menu-section" className="py-16 sm:py-24 bg-[var(--marilo-cream)] relative overflow-hidden">
+        <Blob1 className="absolute top-20 -right-10 w-60 opacity-40" color="#ADC388" />
+        <Blob2 className="absolute top-1/3 -left-16 w-72 opacity-30" color="#fdda25" />
+        <Blob1 className="absolute bottom-40 -right-20 w-80 opacity-25" color="#E27282" />
         <Leaf className="absolute top-32 left-8 w-12 opacity-80 rotate-[20deg]" />
+        <Flower className="absolute top-1/2 right-10 w-12 opacity-90" color="#fdda25"/>
+        <Squiggle className="absolute top-1/3 right-1/4 w-28 opacity-60" color="#8FBAC5"/>
+        <Dots className="absolute bottom-32 left-12 w-20 opacity-50"/>
 
         <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-10">
           <div className="text-center mb-12 sm:mb-16">
             <p className="tracking-[0.4em] text-xs text-black/60 font-semibold uppercase">— Nuestra carta —</p>
-            <h2 className="font-brush text-6xl sm:text-8xl text-[var(--marilo-coral)] mt-2">
-              Sabores que abrazan
+            <h2 className="font-display text-5xl sm:text-7xl text-[var(--marilo-coral)] mt-3 tracking-wide">
+              SABORES QUE ABRAZAN
             </h2>
             <Squiggle className="mx-auto w-32 mt-2" color="#E27282" />
             <p className="mt-4 max-w-xl mx-auto text-sm sm:text-base text-black/70">
@@ -153,11 +168,15 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.1 }}
-                  className="tinted-card p-6 sm:p-10"
+                  className="tinted-card p-6 sm:p-10 relative overflow-hidden"
                   style={{ background: bg }}
                 >
-                  <div className="flex items-baseline gap-5 mb-6">
-                    <h3 className="font-script text-5xl sm:text-6xl leading-none" style={{ color: accent }}>{cat}</h3>
+                  {ci % 4 === 0 && <Flower className="absolute -top-2 -right-2 w-16 opacity-90 rotate-12" color="#fdda25"/>}
+                  {ci % 4 === 1 && <Leaf className="absolute -top-2 right-4 w-12 opacity-90 rotate-12"/>}
+                  {ci % 4 === 2 && <Squiggle className="absolute top-4 right-4 w-24 opacity-70" color="#E27282"/>}
+                  {ci % 4 === 3 && <Dots className="absolute top-4 right-4 w-16 opacity-60"/>}
+                  <div className="flex items-baseline gap-5 mb-6 relative">
+                    <h3 className="font-display text-3xl sm:text-5xl leading-none tracking-wide" style={{ color: accent }}>{cat.toUpperCase()}</h3>
                     <span className="flex-1 h-px bg-black/20" />
                   </div>
                   <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-5">
@@ -184,14 +203,19 @@ export default function HomePage() {
 
       {/* TIENDITA — Próximamente */}
       <section id="tiendita" data-testid="tiendita-section" className="py-16 sm:py-24 bg-white relative overflow-hidden">
-        <ScribblePattern className="absolute inset-0 w-full h-full opacity-30" />
+        <ScribblePattern className="absolute inset-0 w-full h-full opacity-40" />
+        <Blob1 className="absolute top-10 -left-10 w-56 opacity-70" color="#fdda25" />
+        <Blob2 className="absolute top-1/2 -right-10 w-72 opacity-50" color="#F5C9CD" />
+        <Blob1 className="absolute -bottom-10 left-1/4 w-48 opacity-60" color="#8FBAC5" />
+        <Flower className="absolute top-1/4 right-1/4 w-14 opacity-90" color="#E27282"/>
+        <Sun className="absolute bottom-1/4 left-12 w-20 opacity-80"/>
         <div className="relative z-10 max-w-3xl mx-auto px-5 sm:px-10 text-center">
           <Flower className="mx-auto w-16 mb-4" />
           <p className="tracking-[0.4em] text-xs text-black/60 font-semibold uppercase">— Tiendita —</p>
-          <h2 className="font-brush text-7xl sm:text-9xl text-[var(--marilo-coral)] mt-2">próximamente</h2>
+          <h2 className="font-display text-6xl sm:text-8xl text-[var(--marilo-coral)] mt-3 tracking-wide">PRÓXIMAMENTE</h2>
           <Squiggle className="mx-auto w-40 mt-2" color="#ADC388" />
           <p className="mt-6 max-w-xl mx-auto text-sm sm:text-base text-black/75">
-            Pronto encontrarás aquí nuestros productos artesanales para llevar a casa: granos de café, tazas, mermeladas, miel y más sorpresitas hechas con cariño en Mariló.
+            Pronto encontrarás aquí nuestros productos artesanales para llevar a casa: granos de café, tazas, mermeladas, miel y más sorpresitas hechas con cariño en MARILÓ.
           </p>
           {waLink && (
             <a href={waLink} target="_blank" rel="noreferrer" className="btn-pill bg-[var(--marilo-sage)] text-black inline-flex items-center gap-2 mt-8" data-testid="tiendita-whatsapp">
@@ -202,26 +226,30 @@ export default function HomePage() {
       </section>
 
       {/* RECETAS */}
-      <section id="recetas" data-testid="recipe-shelf-section" className="py-16 sm:py-24 bg-[var(--marilo-cream)] relative">
-        <Blob2 className="absolute -top-10 right-8 w-60 opacity-30" color="#F5C9CD" />
+      <section id="recetas" data-testid="recipe-shelf-section" className="py-16 sm:py-24 bg-[var(--marilo-cream)] relative overflow-hidden">
+        <Blob2 className="absolute -top-10 right-8 w-60 opacity-40" color="#F5C9CD" />
+        <Blob1 className="absolute top-1/2 -left-16 w-72 opacity-30" color="#ADC388" />
+        <Blob2 className="absolute bottom-10 right-1/4 w-40 opacity-50" color="#fdda25" />
+        <Squiggle className="absolute top-32 left-1/3 w-32 opacity-70" color="#E27282"/>
+        <Dots className="absolute top-1/2 right-12 w-20 opacity-60"/>
         <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-10">
           <div className="text-center mb-10 sm:mb-14">
             <p className="tracking-[0.4em] text-xs text-black/60 font-semibold uppercase">— Estantería —</p>
-            <h2 className="font-brush text-6xl sm:text-7xl text-[var(--marilo-coral)] mt-2">recetas de la casa</h2>
+            <h2 className="font-display text-5xl sm:text-7xl text-[var(--marilo-coral)] mt-3 tracking-wide">RECETAS DE LA CASA</h2>
             <Squiggle className="mx-auto w-32 mt-2" color="#8FBAC5" />
             <p className="mt-4 max-w-xl mx-auto text-sm sm:text-base text-black/70">
-              Descarga nuestras recetas favoritas para preparar la magia de Mariló en tu cocina.
+              Descarga nuestras recetas favoritas para preparar la magia de MARILÓ en tu cocina.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 relative">
             {recipes.map((r, idx) => (
-              <div key={r.id} className="soft-card overflow-hidden flex flex-col">
+              <div key={r.id} className="soft-card overflow-hidden flex flex-col relative">
                 <div className="aspect-[3/2] bg-[var(--marilo-soft-sage)]">
                   {r.cover_image ? <img src={r.cover_image} alt={r.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Leaf className="w-14" /></div>}
                 </div>
                 <div className="p-5 flex flex-col flex-1">
-                  <h3 className="font-script text-3xl text-black leading-none mb-2">{r.title}</h3>
+                  <h3 className="font-display text-2xl text-black tracking-wide mb-2">{r.title.toUpperCase()}</h3>
                   {r.description && <p className="text-sm text-black/65 mb-4 line-clamp-3 flex-1">{r.description}</p>}
                   <a href={`${API}/recipes/${r.id}`} target="_blank" rel="noreferrer" onClick={async (e) => {
                     e.preventDefault();
@@ -240,7 +268,7 @@ export default function HomePage() {
             {recipes.length === 0 && (
               <div className="sm:col-span-2 lg:col-span-3 soft-card p-12 text-center text-black/60 italic flex flex-col items-center gap-3">
                 <Leaf className="w-12 opacity-80" />
-                <span className="font-script text-3xl">Recetas próximamente…</span>
+                <span className="font-display text-2xl tracking-wide">RECETAS PRÓXIMAMENTE…</span>
               </div>
             )}
           </div>
@@ -249,12 +277,16 @@ export default function HomePage() {
 
       {/* GALLERY */}
       <section id="gallery" data-testid="gallery-section" className="py-16 sm:py-24 bg-white relative overflow-hidden">
-        <Blob1 className="absolute top-20 -left-20 w-72 opacity-25" color="#8FBAC5" />
+        <Blob1 className="absolute top-20 -left-20 w-72 opacity-30" color="#8FBAC5" />
+        <Blob2 className="absolute bottom-10 -right-10 w-72 opacity-40" color="#fdda25" />
+        <Blob1 className="absolute top-1/2 right-1/4 w-32 opacity-60 rotate-45" color="#E27282" />
         <SquiggleLoop className="absolute top-32 right-8 w-24 opacity-80" />
+        <Flower className="absolute bottom-32 left-12 w-12 opacity-90" color="#fdda25"/>
+        <Dots className="absolute top-1/3 left-1/4 w-20 opacity-60"/>
         <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-10">
           <div className="text-center mb-10 sm:mb-14">
             <p className="tracking-[0.4em] text-xs text-black/60 font-semibold uppercase">— Galería —</p>
-            <h2 className="font-brush text-6xl sm:text-7xl text-[var(--marilo-coral)] mt-2">momentos en mariló</h2>
+            <h2 className="font-display text-5xl sm:text-7xl text-[var(--marilo-coral)] mt-3 tracking-wide">MOMENTOS EN MARILÓ</h2>
             <Squiggle className="mx-auto w-32 mt-2" color="#fdda25" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
@@ -266,7 +298,7 @@ export default function HomePage() {
             {gallery.length === 0 && (
               <div className="col-span-full soft-card p-12 text-center italic flex flex-col items-center gap-3">
                 <Flower className="w-14"/>
-                <span className="font-script text-3xl text-black/70">Sube las primeras fotos desde el panel admin.</span>
+                <span className="font-display text-2xl text-black/70 tracking-wide">SUBE LAS PRIMERAS FOTOS DESDE EL PANEL ADMIN</span>
               </div>
             )}
           </div>
@@ -282,25 +314,24 @@ export default function HomePage() {
       <SubscribeSection />
 
       {/* LOCATION + FOOTER */}
-      <section id="location" className="bg-[var(--marilo-cream)]">
-        <div className="max-w-6xl mx-auto px-5 sm:px-10 py-16 sm:py-24">
+      <section id="location" className="bg-[var(--marilo-cream)] relative overflow-hidden">
+        <Blob1 className="absolute top-20 -left-10 w-60 opacity-30" color="#fdda25" />
+        <Blob2 className="absolute bottom-20 -right-10 w-72 opacity-40" color="#ADC388" />
+        <Flower className="absolute top-32 right-1/4 w-12 opacity-90" color="#E27282"/>
+        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-10 py-16 sm:py-24">
           <div className="text-center mb-10 sm:mb-14">
             <p className="tracking-[0.4em] text-xs text-black/60 font-semibold uppercase">— Visítanos —</p>
-            <h2 className="font-brush text-6xl sm:text-7xl text-[var(--marilo-coral)] mt-2">ven a tomar un cafecito</h2>
+            <h2 className="font-display text-5xl sm:text-7xl text-[var(--marilo-coral)] mt-3 tracking-wide">VEN A TOMAR UN CAFECITO</h2>
             <Squiggle className="mx-auto w-32 mt-2" color="#ADC388" />
           </div>
 
-          <div className="soft-card overflow-hidden grid lg:grid-cols-2">
+          <div className="soft-card overflow-hidden grid lg:grid-cols-2 relative">
+            <Flower className="absolute -top-3 left-1/2 w-12 opacity-90 z-10" color="#fdda25"/>
             <div className="aspect-square lg:aspect-auto min-h-[320px] relative" data-testid="location-map">
-              <iframe
-                title="Mariló map"
-                src={settings?.map_embed_url || "https://www.google.com/maps?q=Transmetropolitana+11,+San+Andres+Totoltepec,+Tlalpan,+14400+CDMX&output=embed"}
-                className="absolute inset-0 w-full h-full"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+              <iframe title="MARILÓ map" src={settings?.map_embed_url || "https://www.google.com/maps?q=Transmetropolitana+11,+San+Andres+Totoltepec,+Tlalpan,+14400+CDMX&output=embed"} className="absolute inset-0 w-full h-full" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
             </div>
-            <div className="p-8 sm:p-12 flex flex-col justify-center" style={{ background: "var(--marilo-soft-coral)" }} data-testid="footer-contact">
+            <div className="p-8 sm:p-12 flex flex-col justify-center relative" style={{ background: "var(--marilo-soft-coral)" }} data-testid="footer-contact">
+              <Dots className="absolute bottom-4 right-4 w-16 opacity-50" color="#E27282"/>
               <div className="space-y-4 text-sm sm:text-base">
                 {settings?.address && (
                   <div className="flex gap-4"><MapPin className="w-5 h-5 mt-1 text-[var(--marilo-coral)] flex-shrink-0" /><p>{settings.address}</p></div>
@@ -324,9 +355,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="border-t border-black/10">
+        <div className="border-t border-black/10 relative z-10">
           <div className="max-w-7xl mx-auto px-5 sm:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="font-brush text-4xl text-[var(--marilo-coral)]">Mariló</p>
+            <p className="font-display text-3xl text-[var(--marilo-coral)] tracking-wide">MARILÓ</p>
             <p className="text-[10px] tracking-widest uppercase text-black/50">© {new Date().getFullYear()} — Cafetería con un toquesito oaxaqueño</p>
           </div>
         </div>
