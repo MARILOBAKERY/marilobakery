@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#B06D53"/>
-  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central"
-        font-family="Georgia, 'Cormorant Garamond', serif"
-        font-style="italic" font-weight="500"
-        font-size="280" fill="#F8F5F0">M</text>
+  <rect width="512" height="512" rx="96" fill="#f9557c"/>
+  <circle cx="256" cy="256" r="180" fill="#fdda25"/>
+  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="central"
+        font-family="Impact, 'Anton', sans-serif"
+        font-weight="900"
+        font-size="260" fill="#000">M</text>
 </svg>

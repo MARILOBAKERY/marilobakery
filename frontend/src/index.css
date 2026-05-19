@@ -1,104 +1,154 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Allura&family=Work+Sans:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   MARILÓ — Vintage Oaxaca Pop palette
+   Pink #f9557c · Yellow #fdda25 · Teal #21dfc8
+   Soft pink #fde2eb / #ffb3cd · Soft teal #b2f0e8
+   ============================================ */
+
 html, body {
     margin: 0;
     padding: 0;
-    background: #F8F5F0;
-    color: #382A24;
-    font-family: 'Karla', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #FFF6E9;
+    color: #1A1A1A;
+    font-family: 'Work Sans', 'Libre Baskerville', Georgia, serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
 }
 
+.font-display {
+    font-family: 'Anton', 'Impact', sans-serif;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+}
+
 .font-serif-display {
-    font-family: 'Cormorant Garamond', serif;
-    letter-spacing: -0.01em;
+    font-family: 'Libre Baskerville', Georgia, serif;
+    letter-spacing: -0.005em;
+}
+
+.font-script {
+    font-family: 'Allura', 'Pinyon Script', cursive;
+    letter-spacing: 0;
 }
 
 @layer base {
     :root {
-        --background: 38 36% 95%;          /* #F8F5F0 */
-        --foreground: 18 24% 18%;          /* #382A24 */
-        --card: 36 28% 91%;                /* #EFE9DF */
-        --card-foreground: 18 24% 18%;
-        --popover: 36 28% 91%;
-        --popover-foreground: 18 24% 18%;
-        --primary: 16 36% 51%;             /* #B06D53 terracotta */
+        --background: 40 100% 96%;          /* #FFF6E9 cream */
+        --foreground: 0 0% 10%;             /* near black */
+        --card: 340 90% 94%;                /* #fde2eb soft pink */
+        --card-foreground: 0 0% 10%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 10%;
+        --primary: 340 92% 56%;             /* #f9557c pink */
         --primary-foreground: 0 0% 100%;
-        --secondary: 105 9% 50%;           /* #7A8974 sage */
-        --secondary-foreground: 0 0% 100%;
-        --muted: 36 28% 87%;               /* #E6DFD4 */
-        --muted-foreground: 24 14% 37%;    /* #6B5C53 */
-        --accent: 26 38% 76%;              /* #D8BCA8 */
-        --accent-foreground: 18 24% 18%;
-        --destructive: 0 49% 43%;          /* #A43939 */
+        --secondary: 172 73% 50%;           /* #21dfc8 teal */
+        --secondary-foreground: 0 0% 10%;
+        --muted: 340 100% 95%;              /* very light pink */
+        --muted-foreground: 0 0% 35%;
+        --accent: 51 98% 57%;               /* #fdda25 yellow */
+        --accent-foreground: 0 0% 10%;
+        --destructive: 0 70% 50%;
         --destructive-foreground: 0 0% 100%;
-        --border: 32 16% 78%;              /* #D1C7BB */
-        --input: 32 16% 78%;
-        --ring: 16 36% 51%;
-        --radius: 0.75rem;
+        --border: 0 0% 10%;                 /* black borders (vintage) */
+        --input: 0 0% 75%;
+        --ring: 340 92% 56%;
+        --radius: 1rem;
+
+        /* Brand-named tokens for arbitrary use */
+        --marilo-pink: #f9557c;
+        --marilo-yellow: #fdda25;
+        --marilo-teal: #21dfc8;
+        --marilo-soft-teal: #b2f0e8;
+        --marilo-soft-pink: #fde2eb;
+        --marilo-mid-pink: #ffb3cd;
+        --marilo-black: #000000;
+        --marilo-cream: #FFF6E9;
     }
 }
 
 @layer base {
-    * {
-        @apply border-border;
-    }
-    body {
-        @apply bg-background text-foreground;
-    }
+    * { @apply border-border; }
+    body { @apply bg-background text-foreground; }
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 500;
-        letter-spacing: -0.01em;
+        font-family: 'Anton', 'Impact', sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.01em;
     }
 }
 
-/* Grain texture overlay for warmth */
+/* Vintage paper/grain overlay */
 .grain::before {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 1;
-    opacity: 0.04;
+    opacity: 0.05;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     mix-blend-mode: multiply;
 }
 
-/* Smooth scrollbar */
+/* Neo-vintage card outlines & offset shadows */
+.vintage-card {
+    border: 2px solid #000;
+    box-shadow: 6px 6px 0 0 #000;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.vintage-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 0 #000;
+}
+.vintage-card-pink { background: var(--marilo-soft-pink); }
+.vintage-card-teal { background: var(--marilo-soft-teal); }
+.vintage-card-yellow { background: var(--marilo-yellow); }
+
+/* Hand-drawn dotted divider */
+.divider-dots {
+    height: 4px;
+    background-image: radial-gradient(circle, #000 1px, transparent 1.5px);
+    background-size: 14px 4px;
+    background-repeat: repeat-x;
+    background-position: 0 50%;
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #F0EAE0; }
-::-webkit-scrollbar-thumb { background: #B06D53; border-radius: 8px; }
+::-webkit-scrollbar-track { background: var(--marilo-soft-pink); }
+::-webkit-scrollbar-thumb { background: var(--marilo-pink); border-radius: 8px; border: 2px solid #fff; }
 
 /* Selection */
-::selection { background: #B06D53; color: #fff; }
+::selection { background: var(--marilo-yellow); color: #000; }
 
-/* Marquee custom underline */
-.divider-handdrawn {
-    height: 1px;
-    background: repeating-linear-gradient(90deg, #B06D53 0 8px, transparent 8px 14px);
-}
-
-/* Section transitions */
-.section-fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.9s ease-out forwards;
-}
-
-@keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Custom focus */
+/* Focus */
 :focus-visible {
-    outline: 2px solid #B06D53;
+    outline: 3px solid var(--marilo-pink);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 6px;
+}
+
+/* Sticker bouncy tag */
+.sticker {
+    display: inline-block;
+    transform: rotate(-3deg);
+    background: var(--marilo-yellow);
+    color: #000;
+    padding: 6px 14px;
+    border: 2px solid #000;
+    box-shadow: 3px 3px 0 0 #000;
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Decorative wavy SVG used as section separator (use as background) */
+.wave-teal {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q 150 0 300 20 T 600 20 T 900 20 T 1200 20 V 40 H 0 Z' fill='%2321dfc8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }

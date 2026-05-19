@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Routes, Route, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { Coffee, ImageIcon, FileText, ShoppingBag, Settings as SettingsIcon, LogOut, Home, Users } from "lucide-react";
+import { Coffee, ImageIcon, FileText, ShoppingBag, Settings as SettingsIcon, LogOut, Home, Users, LayoutDashboard } from "lucide-react";
+import DashboardAdmin from "@/components/admin/DashboardAdmin";
 import MenuAdmin from "@/components/admin/MenuAdmin";
 import GalleryAdmin from "@/components/admin/GalleryAdmin";
 import RecipesAdmin from "@/components/admin/RecipesAdmin";
@@ -11,6 +12,7 @@ import SettingsAdmin from "@/components/admin/SettingsAdmin";
 import SubscribersAdmin from "@/components/admin/SubscribersAdmin";
 
 const NAV = [
+  { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard, testid: "admin-nav-dashboard" },
   { to: "/admin/menu", label: "Carta", icon: Coffee, testid: "admin-nav-menu" },
   { to: "/admin/tiendita", label: "Tiendita", icon: ShoppingBag, testid: "admin-nav-tiendita" },
   { to: "/admin/recetas", label: "Recetas (PDFs)", icon: FileText, testid: "admin-nav-recipes" },
@@ -85,7 +87,8 @@ export default function AdminDashboard() {
       {/* Main */}
       <main className="flex-1 p-6 lg:p-10 pt-24 lg:pt-10 overflow-x-hidden">
         <Routes>
-          <Route index element={<MenuAdmin />} />
+          <Route index element={<DashboardAdmin />} />
+          <Route path="dashboard" element={<DashboardAdmin />} />
           <Route path="menu" element={<MenuAdmin />} />
           <Route path="tiendita" element={<ProductsAdmin />} />
           <Route path="recetas" element={<RecipesAdmin />} />

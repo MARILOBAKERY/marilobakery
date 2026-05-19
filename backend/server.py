@@ -462,6 +462,93 @@ async def coupon_stats(current=Depends(get_current_admin)):
 
 
 # ---------------------------------------------------------------
+# Analytics
+# ---------------------------------------------------------------
+class TrackEvent(BaseModel):
+    type: str  # 'product_view' | 'recipe_download'
+    ref_id: str
+
+
+@api_router.post("/track")
+async def track_event(ev: TrackEvent):
+    if ev.type not in {"product_view", "recipe_download"}:
+        raise HTTPException(status_code=400, detail="Tipo de evento no soportado")
+    await db.events.insert_one({
+        "id": str(uuid.uuid4()),
+        "type": ev.type,
+        "ref_id": ev.ref_id,
+        "ts": datetime.now(timezone.utc).isoformat(),
+    })
+    return {"ok": True}
+
+
+@api_router.get("/analytics/overview")
+async def analytics_overview(current=Depends(get_current_admin)):
+    # Totals
+    total_subs = await db.subscribers.count_documents({})
+    redeemed = await db.subscribers.count_documents({"redeemed": True})
+    total_menu = await db.menu_items.count_documents({})
+    total_products = await db.products.count_documents({})
+    total_recipes = await db.recipes.count_documents({})
+    total_views = await db.events.count_documents({"type": "product_view"})
+    total_downloads = await db.events.count_documents({"type": "recipe_download"})
+
+    # Subs per week (last 8 weeks)
+    now = datetime.now(timezone.utc)
+    weeks = []
+    for i in range(7, -1, -1):
+        start = now - timedelta(days=(i + 1) * 7 - 1)
+        end = now - timedelta(days=i * 7 - 1)
+        start_iso = start.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+        end_iso = end.replace(hour=23, minute=59, second=59).isoformat()
+        count = await db.subscribers.count_documents({"created_at": {"$gte": start_iso, "$lte": end_iso}})
+        weeks.append({"label": start.strftime("%d %b"), "subs": count})
+
+    # Top products by views
+    products = await db.products.find({}, {"_id": 0, "id": 1, "name": 1, "image_url": 1}).to_list(1000)
+    products_map = {p["id"]: p for p in products}
+    top_products_cursor = db.events.aggregate([
+        {"$match": {"type": "product_view"}},
+        {"$group": {"_id": "$ref_id", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 5},
+    ])
+    top_products = []
+    async for row in top_products_cursor:
+        meta = products_map.get(row["_id"]) or {"name": "(eliminado)"}
+        top_products.append({"id": row["_id"], "name": meta.get("name", "?"), "image_url": meta.get("image_url", ""), "count": row["count"]})
+
+    # Top recipes by downloads
+    recipes = await db.recipes.find({}, {"_id": 0, "id": 1, "title": 1}).to_list(1000)
+    recipes_map = {r["id"]: r for r in recipes}
+    top_recipes_cursor = db.events.aggregate([
+        {"$match": {"type": "recipe_download"}},
+        {"$group": {"_id": "$ref_id", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 5},
+    ])
+    top_recipes = []
+    async for row in top_recipes_cursor:
+        meta = recipes_map.get(row["_id"]) or {"title": "(eliminada)"}
+        top_recipes.append({"id": row["_id"], "title": meta.get("title", "?"), "count": row["count"]})
+
+    return {
+        "totals": {
+            "subscribers": total_subs,
+            "redeemed": redeemed,
+            "menu_items": total_menu,
+            "products": total_products,
+            "recipes": total_recipes,
+            "product_views": total_views,
+            "recipe_downloads": total_downloads,
+        },
+        "subs_per_week": weeks,
+        "top_products": top_products,
+        "top_recipes": top_recipes,
+    }
+
+
+# ---------------------------------------------------------------
 # App configuration
 # ---------------------------------------------------------------
 app.include_router(api_router)
@@ -482,15 +569,83 @@ logger = logging.getLogger(__name__)
 # Startup: seed admin and sample data
 # ---------------------------------------------------------------
 SAMPLE_MENU = [
-    {"name": "Espresso", "description": "Granos de origen único, extracción corta", "price": "$35", "category": "Cafés", "order": 1},
-    {"name": "Cappuccino", "description": "Espresso, leche vaporizada, espuma sedosa", "price": "$55", "category": "Cafés", "order": 2},
-    {"name": "Latte de Lavanda", "description": "Toques florales y miel artesanal", "price": "$70", "category": "Cafés", "order": 3},
-    {"name": "Chai Masala", "description": "Especias frescas molidas en casa", "price": "$60", "category": "Tés", "order": 4},
-    {"name": "Matcha Latte", "description": "Matcha ceremonial, leche de avena", "price": "$75", "category": "Tés", "order": 5},
-    {"name": "Croissant de Mantequilla", "description": "Hojaldre francés horneado cada mañana", "price": "$45", "category": "Panadería", "order": 6},
-    {"name": "Pan de Plátano", "description": "Con nueces tostadas y canela", "price": "$50", "category": "Panadería", "order": 7},
-    {"name": "Avocado Toast", "description": "Pan de masa madre, aguacate, semillas", "price": "$95", "category": "Brunch", "order": 8},
-    {"name": "Bowl de Yogur Griego", "description": "Frutas de temporada, granola casera", "price": "$85", "category": "Brunch", "order": 9},
+    # ESPECIALES
+    {"name": "Quiché Vegetariano", "description": "Champiñones, espinacas, queso mozarella y huevo batido sobre una crujiente base para pay.", "price": "$121", "category": "Especiales", "order": 1},
+    {"name": "Quiché de Atún", "description": "Atún, aceitunas, zanahoria, queso mozarella y huevo batido sobre una crujiente base para pay.", "price": "$136", "category": "Especiales", "order": 2},
+    {"name": "Pasta Marinara", "description": "Fusilli con salsa marinara, verduras y queso mozarella.", "price": "$126", "category": "Especiales", "order": 3},
+    {"name": "Fusilli al Cilantro", "description": "Salsa cremosa de cilantro, queso mozarella y tiras de pechuga de pollo.", "price": "$194", "category": "Especiales", "order": 4},
+    {"name": "Lasaña", "description": "La tradicional lasaña boloñesa, acompañada de ensalada con aderezo de cilantro.", "price": "$179", "category": "Especiales", "order": 5},
+    {"name": "+ Sopa & bebida", "description": "Acompaña cualquier especial con sopa del día y bebida.", "price": "+$87", "category": "Especiales", "order": 6},
+    # BAGUETTES
+    {"name": "Oaxaqueña", "description": "Pasta de frijolito, queso manchego y chorizo oaxaqueño.", "price": "$134", "category": "Baguettes", "order": 10},
+    {"name": "Yucateca", "description": "Pasta de frijolito, cochinita pibil y queso manchego.", "price": "$146", "category": "Baguettes", "order": 11},
+    {"name": "Del Huerto", "description": "Pesto, jamón de pavo, queso manchego, pepino, zanahoria y lechugas.", "price": "$116", "category": "Baguettes", "order": 12},
+    {"name": "Italiana", "description": "Aderezo de jitomate, salami, queso manchego y lechugas.", "price": "$116", "category": "Baguettes", "order": 13},
+    {"name": "Fungi", "description": "Mantequilla, champiñones salteados al ajillo, queso manchego y espinacas baby.", "price": "$116", "category": "Baguettes", "order": 14},
+    # PIZZAS
+    {"name": "Pizza Salami", "description": "Salami y queso mozarella con nuestra receta especial de salsa de tomate.", "price": "$125", "category": "Pizzas", "order": 20},
+    {"name": "Pizza Vegetariana", "description": "Espinacas frescas, champiñones, calabacitas zucchini y aceitunas negras.", "price": "$125", "category": "Pizzas", "order": 21},
+    {"name": "Pizza Poblana", "description": "Rajas poblanas, granitos de elote amarillo, cebolla morada y queso mozarella.", "price": "$125", "category": "Pizzas", "order": 22},
+    {"name": "Pizza Pesto", "description": "Pesto de albahaca y parmesano, acompañada de tomates cherry y queso mozarella.", "price": "$125", "category": "Pizzas", "order": 23},
+    {"name": "Pizza Chapulines", "description": "Receta de casa con crema de ajo y albahaca, mozzarella, champiñones y chapulines traídos de Oaxaca.", "price": "$139", "category": "Pizzas", "order": 24},
+    # ENSALADAS
+    {"name": "Ensalada Mariló", "description": "Lechuga, pepino, zanahoria rayada, col morada, fresas, mezcla de semillas y aderezo de cilantro al limón.", "price": "$126", "category": "Ensaladas", "order": 30},
+    {"name": "Ensalada Fresca", "description": "Espinacas frescas, manzana, pecanas troceadas, arándanos deshidratados y queso de cabra. Aceite de oliva y vinagre balsámico.", "price": "$134", "category": "Ensaladas", "order": 31},
+    # BRUNCH
+    {"name": "Molletes", "description": "Frijoles aromatizados con hoja de aguacate, sobre crujiente baguette horneada en Mariló y queso manchego gratinado.", "price": "$99", "category": "Brunch", "order": 40},
+    {"name": "Chilaquiles Oaxaqueños", "description": "Coloradito o mole negro, crema y queso gratinado.", "price": "$115", "category": "Brunch", "order": 41},
+    {"name": "Chilaquiles Tradicionales", "description": "Salsa verde o roja, crema y queso gratinado.", "price": "$105", "category": "Brunch", "order": 42},
+    # BARRA DE CAFE
+    {"name": "Espresso", "description": "Shot de espresso 30 ml.", "price": "$37", "category": "Barra de Café", "order": 50},
+    {"name": "Doppio", "description": "2 shots de espresso 60 ml.", "price": "$42", "category": "Barra de Café", "order": 51},
+    {"name": "Macchiato", "description": "Shot de espresso 30 ml + leche.", "price": "$45", "category": "Barra de Café", "order": 52},
+    {"name": "Americano", "description": "2 shots de espresso 60 ml + agua.", "price": "$49", "category": "Barra de Café", "order": 53},
+    {"name": "Cappuccino", "description": "1 a 2 shots de espresso 60 ml + leche.", "price": "$65", "category": "Barra de Café", "order": 54},
+    {"name": "Moka", "description": "2 shots de espresso + chocolate + leche.", "price": "$74", "category": "Barra de Café", "order": 55},
+    {"name": "Affogato", "description": "2 shots de espresso + helado de vainilla.", "price": "$98", "category": "Barra de Café", "order": 56},
+    {"name": "Carajillo", "description": "2 shots de espresso + 60 ml de Licor 43 (frío).", "price": "$139", "category": "Barra de Café", "order": 57},
+    # LATTES
+    {"name": "Latte", "description": "1 a 2 shots de espresso 60 ml + leche.", "price": "$65", "category": "Lattes", "order": 60},
+    {"name": "Chai", "description": "Mezcla de especias orientales.", "price": "$85", "category": "Lattes", "order": 61},
+    {"name": "Taro", "description": "Tubérculo con distintivo color violeta y delicado sabor dulce.", "price": "$85", "category": "Lattes", "order": 62},
+    {"name": "Mazapán", "description": "Tradicional dulce mexicano de cacahuate.", "price": "$85", "category": "Lattes", "order": 63},
+    {"name": "Dirty Chai", "description": "Espresso + mezcla de especias orientales.", "price": "$85", "category": "Lattes", "order": 64},
+    {"name": "Matcha", "description": "Sabor a hojas de té verde finamente molidas.", "price": "$89", "category": "Lattes", "order": 65},
+    # CHOCOLATE
+    {"name": "Chocolate Clásico", "description": "Cremoso y reconfortante.", "price": "$65", "category": "Chocolate", "order": 70},
+    {"name": "White Cocoa", "description": "Chocolate blanco aterciopelado.", "price": "$85", "category": "Chocolate", "order": 71},
+    {"name": "Chocolate Oaxaqueño", "description": "Base agua o base leche. 100% artesanal. Cacao especial, canela, almendras y azúcar morena.", "price": "$79", "category": "Chocolate", "order": 72},
+    # TES & TISANAS
+    {"name": "Té y Tisanas (12 oz)", "description": "Selección de la casa.", "price": "$63", "category": "Tés & Tisanas", "order": 80},
+    {"name": "Té Frío (16 oz)", "description": "Té helado de temporada.", "price": "$70", "category": "Tés & Tisanas", "order": 81},
+    # FRAPPES
+    {"name": "Frappe Cappuccino", "description": "Espresso, leche y hielo.", "price": "$84", "category": "Frappes", "order": 90},
+    {"name": "Frappe Moka", "description": "Espresso, chocolate, leche y hielo.", "price": "$98", "category": "Frappes", "order": 91},
+    {"name": "Frappe Chocolate", "description": "Chocolate cremoso frappeado.", "price": "$97", "category": "Frappes", "order": 92},
+    {"name": "Frappe White Cocoa", "description": "Chocolate blanco frappeado.", "price": "$117", "category": "Frappes", "order": 93},
+    {"name": "Frappe Chai", "description": "Especias orientales frappeadas.", "price": "$117", "category": "Frappes", "order": 94},
+    {"name": "Frappe Taro", "description": "Taro suave y dulce frappeado.", "price": "$117", "category": "Frappes", "order": 95},
+    {"name": "Frappe Matcha", "description": "Matcha en frío.", "price": "$117", "category": "Frappes", "order": 96},
+    {"name": "Frappe Mazapán", "description": "Mazapán mexicano frappeado.", "price": "$117", "category": "Frappes", "order": 97},
+    {"name": "Frappe Dirty Chai", "description": "Espresso + chai frappeado.", "price": "$117", "category": "Frappes", "order": 98},
+    {"name": "Smoothie", "description": "Fruta natural batida.", "price": "$79", "category": "Frappes", "order": 99},
+    {"name": "Chamoyada", "description": "Fresa o mango con chamoy.", "price": "$76", "category": "Frappes", "order": 100},
+    {"name": "Tejate de Frutas", "description": "Limón, fresa, maracuyá o mango.", "price": "$78", "category": "Frappes", "order": 101},
+    # BEBIDAS FRIAS
+    {"name": "Naranjada / Limonada", "description": "Recién exprimida.", "price": "$67", "category": "Bebidas Frías", "order": 110},
+    {"name": "San Pellegrino", "description": "Agua mineral italiana.", "price": "$48", "category": "Bebidas Frías", "order": 111},
+    {"name": "Coca Cola", "description": "Clásico de siempre.", "price": "$43", "category": "Bebidas Frías", "order": 112},
+    {"name": "Arizona", "description": "Té helado importado.", "price": "$41", "category": "Bebidas Frías", "order": 113},
+    {"name": "Agua Embotellada", "description": "Natural.", "price": "$30", "category": "Bebidas Frías", "order": 114},
+    {"name": "Colima Beer", "description": "Cerveza artesanal mexicana.", "price": "$79", "category": "Bebidas Frías", "order": 115},
+    {"name": "Vinito Lambrusco", "description": "Copa de vino espumoso.", "price": "$99", "category": "Bebidas Frías", "order": 116},
+    # REPOSTERIA
+    {"name": "Galletas de Mantequilla", "description": "Recién horneadas.", "price": "$54", "category": "Repostería", "order": 120},
+    {"name": "Galletas de Chispas de Chocolate", "description": "Crujientes por fuera, suaves por dentro.", "price": "$54", "category": "Repostería", "order": 121},
+    {"name": "Rol de Canela", "description": "Esponjoso, con glaseado.", "price": "$54", "category": "Repostería", "order": 122},
+    {"name": "Tarta de Manzana", "description": "Manzana caramelizada en hojaldre.", "price": "$81", "category": "Repostería", "order": 123},
+    {"name": "Brownie", "description": "De chocolate oaxaqueño y helado de vainilla.", "price": "$114", "category": "Repostería", "order": 124},
+    {"name": "Cake del Día", "description": "Vainilla con fresas, choco avellanas, tres leches o zanahoria con nuez.", "price": "$106", "category": "Repostería", "order": 125},
 ]
 
 SAMPLE_PRODUCTS = [
@@ -510,6 +665,9 @@ SAMPLE_GALLERY = [
 ]
 
 
+MENU_SEED_VERSION = "marilo_oaxaca_v2"
+
+
 @app.on_event("startup")
 async def startup_event():
     # Seed admin
@@ -525,17 +683,21 @@ async def startup_event():
         })
         logger.info(f"Seeded admin user: {ADMIN_EMAIL}")
     else:
-        # keep password in sync with env (so resets are easy)
         if not verify_password(ADMIN_PASSWORD, existing.get("password_hash", "")):
             await db.users.update_one({"email": ADMIN_EMAIL}, {"$set": {"password_hash": hash_password(ADMIN_PASSWORD)}})
             logger.info("Admin password synced with env")
 
-    # Seed sample menu if empty
-    if await db.menu_items.count_documents({}) == 0:
+    # Menu seed (with versioned migration). When MENU_SEED_VERSION changes
+    # we drop the existing seed and reseed. Admin custom edits are preserved
+    # only if same version — otherwise (initial setup) they're replaced.
+    meta = await db.meta.find_one({"_id": "menu_seed"})
+    if not meta or meta.get("version") != MENU_SEED_VERSION:
+        await db.menu_items.delete_many({})
         for it in SAMPLE_MENU:
             obj = MenuItem(**it)
             await db.menu_items.insert_one(obj.model_dump())
-        logger.info("Seeded sample menu items")
+        await db.meta.update_one({"_id": "menu_seed"}, {"$set": {"version": MENU_SEED_VERSION}}, upsert=True)
+        logger.info(f"Seeded menu items (version {MENU_SEED_VERSION})")
 
     # Seed sample products if empty
     if await db.products.count_documents({}) == 0:
