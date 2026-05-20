@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Instagram, MapPin, Phone, Clock, Mail, Download, ArrowRight, ChevronDown, Facebook, MessageCircle, Menu as MenuIcon, X } from "lucide-react";
+import { Instagram, MapPin, Phone, Clock, Mail, Download, ArrowRight, ChevronDown, Facebook, MessageCircle, Menu as MenuIcon, X, Home } from "lucide-react";
 import { api, API } from "@/lib/api";
 import SubscribeSection from "@/components/SubscribeSection";
 
@@ -39,7 +39,9 @@ export default function HomePage() {
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[var(--marilo-cream)]/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-4 flex items-center justify-between">
-          <button onClick={() => scrollTo("hero")} className="font-display text-3xl text-[var(--marilo-coral)] tracking-wide" data-testid="nav-home">MARILÓ</button>
+          <button onClick={() => scrollTo("hero")} aria-label="Inicio" className="text-[var(--marilo-coral)] hover:scale-110 transition" data-testid="nav-home">
+            <Home className="w-7 h-7" strokeWidth={2.4} />
+          </button>
           <div className="hidden md:flex items-center gap-7 text-[12px] tracking-wider uppercase font-semibold">
             <button onClick={() => scrollTo("menu")} className="hover:text-[var(--marilo-coral)] transition" data-testid="nav-menu">Carta</button>
             <button onClick={() => scrollTo("tiendita")} className="hover:text-[var(--marilo-coral)] transition" data-testid="nav-shop">Tiendita</button>
