@@ -180,8 +180,7 @@ export default function HomePage() {
       <section id="recetas" data-testid="recipe-shelf-section" className="bg-[var(--marilo-blue)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28">
           <div className="text-center mb-12">
-            <p className="tracking-[0.4em] text-xs text-black/70 font-semibold uppercase">— Estantería —</p>
-            <h2 className="font-display text-5xl sm:text-7xl text-black mt-3 tracking-wide">RECETAS DE LA CASA</h2>
+            <h2 className="font-display text-6xl sm:text-8xl text-black tracking-wide">ESTANTERÍA</h2>
             <p className="font-script text-xl sm:text-2xl mt-4 max-w-xl mx-auto text-black/80">
               Descarga nuestras recetas favoritas para preparar la magia de MARILÓ en tu cocina.
             </p>
@@ -271,9 +270,6 @@ export default function HomePage() {
                 )}
                 {settings?.phone && (
                   <div className="flex gap-4"><Phone className="w-5 h-5 mt-1 text-[var(--marilo-coral)] flex-shrink-0" /><a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="hover:text-[var(--marilo-coral)]">{settings.phone}</a></div>
-                )}
-                {settings?.email && (
-                  <div className="flex gap-4"><Mail className="w-5 h-5 mt-1 text-[var(--marilo-coral)] flex-shrink-0" /><a href={`mailto:${settings.email}`} className="hover:text-[var(--marilo-coral)] break-all">{settings.email}</a></div>
                 )}
               </div>
               <div className="flex items-center gap-3 mt-8 pt-6 border-t border-black/15">
