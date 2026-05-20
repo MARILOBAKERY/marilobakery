@@ -225,7 +225,6 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28">
           <div className="text-center mb-12">
             <p className="tracking-[0.4em] text-xs text-black/70 font-semibold uppercase">— Galería —</p>
-            <h2 className="font-display text-5xl sm:text-7xl text-black mt-3 tracking-wide">MOMENTOS EN MARILÓ</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
             {gallery.map((g, idx) => (
