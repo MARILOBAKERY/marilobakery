@@ -32,7 +32,6 @@ function App() {
             />
           </Routes>
           <Toaster richColors position="top-right" />
-          <InstallPWA />
         </AuthProvider>
       </BrowserRouter>
     </div>

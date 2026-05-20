@@ -96,7 +96,7 @@ export default function HomePage() {
             <div className="sm:col-span-2 p-8 sm:p-12 flex flex-col justify-center" style={{ background: "var(--marilo-soft-coral)" }}>
               <h3 className="font-display text-3xl sm:text-4xl text-black tracking-wide mb-3">BIENVENIDA</h3>
               <p className="font-script text-xl sm:text-2xl leading-snug text-black/85">
-                Un rincón tierno donde el café, la repostería y la cocina oaxaqueña se encuentran. Pasa, siéntate y respira: ya estás en casa.
+                Un rincón donde el café, la repostería y la cocina oaxaqueña se encuentran. Pasa, siéntate y respira: ya estás en casa.
               </p>
             </div>
           </div>
