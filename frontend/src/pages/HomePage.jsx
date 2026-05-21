@@ -5,7 +5,7 @@ import { Instagram, MapPin, Phone, Clock, Mail, Download, ArrowRight, ChevronDow
 import { api, API } from "@/lib/api";
 import SubscribeSection from "@/components/SubscribeSection";
 
-const HERO_IMG = "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/jv3x6mxj_IMG_0752.jpeg";
+const HERO_IMG = "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/w077yss5_MARILO%CC%81.jpeg";
 const LOGO_IMG = "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/06brbr54_Marilo.png";
 
 // Section background rotation — 4 flat colors
@@ -16,6 +16,7 @@ export default function HomePage() {
   const [menu, setMenu] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [recipes, setRecipes] = useState([]);
+  const [products, setProducts] = useState([]);
   const [settings, setSettings] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState(null);
@@ -41,6 +42,7 @@ export default function HomePage() {
       api.get("/menu").then((r) => setMenu(r.data)),
       api.get("/gallery").then((r) => setGallery(r.data)),
       api.get("/recipes").then((r) => setRecipes(r.data)),
+      api.get("/products").then((r) => setProducts(r.data)),
       api.get("/settings").then((r) => setSettings(r.data)),
     ]).catch(() => {});
   }, []);
@@ -95,13 +97,13 @@ export default function HomePage() {
             src={LOGO_IMG}
             alt="MARILÓ"
             data-testid="hero-logo"
-            className="mx-auto w-[16rem] sm:w-[22rem] lg:w-[28rem] h-auto select-none"
+            className="mx-auto w-[7rem] sm:w-[9rem] lg:w-[10rem] h-auto select-none"
             draggable="false"
           />
-          <p className="tracking-[0.45em] text-xs sm:text-sm lg:text-base text-black/70 font-semibold uppercase mt-6">
+          <p className="tracking-[0.45em] text-xs sm:text-sm lg:text-base text-black/70 font-semibold uppercase mt-5">
             Cafetería con un toquesito Oaxaqueño
           </p>
-          <p className="font-script text-2xl sm:text-3xl lg:text-4xl mt-8 max-w-3xl mx-auto leading-snug text-black/85">
+          <p className="font-script text-2xl sm:text-3xl lg:text-4xl mt-6 max-w-3xl mx-auto leading-snug text-black/85">
             Aquí comes <span className="text-[var(--marilo-coral)]">rico y bonito</span>, te tomas un buen <span className="text-[var(--marilo-coral)]">cafecito</span> y lo acompañas con un rico <span className="text-[var(--marilo-coral)]">postrecito</span>.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -120,7 +122,7 @@ export default function HomePage() {
               <img src={HERO_IMG} alt="MARILÓ" className="w-full h-full object-cover" />
             </div>
             <div className="sm:col-span-2 p-8 sm:p-12 flex flex-col justify-center" style={{ background: "var(--marilo-soft-coral)" }}>
-              <h3 className="font-display text-3xl sm:text-4xl text-black tracking-wide mb-3">BIENVENIDA</h3>
+              <h3 className="font-display text-3xl sm:text-4xl text-black tracking-wide mb-3">BIENVENI@</h3>
               <p className="font-script text-xl sm:text-2xl leading-snug text-black/85">
                 Un rincón donde el café, la repostería y la cocina oaxaqueña se encuentran. Pasa, siéntate y respira: ya estás en casa.
               </p>
@@ -140,12 +142,12 @@ export default function HomePage() {
 
       {/* MENU — alternating section backgrounds per category */}
       <section id="menu" data-testid="menu-section" className="bg-[var(--marilo-cream)]">
-        <div className="max-w-6xl mx-auto px-5 sm:px-10 py-16 sm:py-24 text-center">
+        <div className="max-w-6xl mx-auto px-5 sm:px-10 py-8 sm:py-12 text-center">
           <p className="tracking-[0.4em] text-xs text-black/60 font-semibold uppercase">— Nuestra carta —</p>
-          <h2 className="font-display text-5xl sm:text-7xl text-[var(--marilo-coral)] mt-3 tracking-wide">
+          <h2 className="font-display text-5xl sm:text-7xl text-[var(--marilo-coral)] mt-2 tracking-wide">
             SABORES QUE ABRAZAN
           </h2>
-          <p className="font-script text-xl sm:text-2xl mt-4 max-w-xl mx-auto text-black/75">
+          <p className="font-script text-xl sm:text-2xl mt-3 max-w-xl mx-auto text-black/75">
             Comida con corazón, café especial y repostería casera.
           </p>
         </div>
@@ -196,7 +198,6 @@ export default function HomePage() {
                     </div>
                     <div className="grid md:grid-cols-12 gap-5 md:gap-8 items-start">
                       <div className="md:col-span-5">
-                        <p className="tracking-[0.35em] text-[10px] sm:text-[11px] font-semibold uppercase text-black/70 mb-2">— Combo del día —</p>
                         <h4 className="font-display text-2xl sm:text-3xl leading-tight tracking-wide">
                           ARMA TU PACK DE COMIDA
                         </h4>
@@ -220,17 +221,55 @@ export default function HomePage() {
       </section>
 
       {/* TIENDITA — coral */}
-      <section id="tiendita" data-testid="tiendita-section" className="bg-[var(--marilo-coral)] text-white py-20 sm:py-28">
-        <div className="max-w-3xl mx-auto px-5 sm:px-10 text-center">
-          <p className="tracking-[0.4em] text-xs text-white/80 font-semibold uppercase">— Tiendita —</p>
-          <h2 className="font-display text-6xl sm:text-8xl mt-4 tracking-wide">PRÓXIMAMENTE</h2>
-          <p className="font-script text-xl sm:text-2xl mt-6 max-w-xl mx-auto text-white/95">
-            Pronto encontrarás aquí nuestros productos artesanales para llevar a casa: granos de café, tazas, mermeladas, miel y más sorpresitas hechas con cariño en MARILÓ.
-          </p>
+      <section id="tiendita" data-testid="tiendita-section" className="bg-[var(--marilo-coral)] text-white py-16 sm:py-24">
+        <div className="max-w-6xl mx-auto px-5 sm:px-10">
+          <div className="text-center mb-10 sm:mb-14">
+            <p className="tracking-[0.4em] text-xs text-white/80 font-semibold uppercase">— Tiendita —</p>
+            <h2 className="font-display text-5xl sm:text-7xl mt-3 tracking-wide">PARA LLEVAR A CASA</h2>
+            <p className="font-script text-lg sm:text-2xl mt-3 max-w-xl mx-auto text-white/95">
+              Productos artesanales hechos con cariño en MARILÓ.
+            </p>
+          </div>
+
+          {products.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
+              {products.filter((p) => p.available).map((p) => (
+                <div key={p.id} className="bg-white text-black flex flex-col" data-testid={`product-card-${p.id}`}>
+                  <div className="aspect-square bg-[var(--marilo-soft-coral)] overflow-hidden">
+                    {p.image_url ? (
+                      <img
+                        src={p.image_url}
+                        alt={p.name}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <p className="font-display text-3xl text-[var(--marilo-coral)]/40 tracking-wide">MARILÓ</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5 sm:p-6 flex flex-col flex-1">
+                    <h3 className="font-display text-2xl sm:text-3xl tracking-wide mb-2 leading-tight">{p.name.toUpperCase()}</h3>
+                    {p.description && <p className="text-sm sm:text-base text-black/70 mb-4 flex-1 leading-snug">{p.description}</p>}
+                    <p className="font-display text-3xl sm:text-4xl text-[var(--marilo-coral)] tracking-wide mt-auto">{p.price}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white/10 py-14 px-8 text-center">
+              <p className="font-display text-3xl tracking-wide text-white/80">PRÓXIMAMENTE</p>
+            </div>
+          )}
+
           {waLink && (
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-pill bg-[#fdda25] text-black inline-flex items-center gap-2 mt-10" data-testid="tiendita-whatsapp">
-              Avísame cuando esté lista <MessageCircle className="w-4 h-4" />
-            </a>
+            <div className="text-center mt-12">
+              <a href={waLink} target="_blank" rel="noreferrer" className="btn-pill bg-[#fdda25] text-black inline-flex items-center gap-2" data-testid="tiendita-whatsapp">
+                Pídelos por WhatsApp <MessageCircle className="w-4 h-4" />
+              </a>
+            </div>
           )}
         </div>
       </section>

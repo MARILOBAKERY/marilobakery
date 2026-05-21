@@ -648,22 +648,20 @@ SAMPLE_MENU = [
 ]
 
 SAMPLE_PRODUCTS = [
-    {"name": "Café en Grano 250g", "description": "Tueste medio • Notas a chocolate y cereza", "price": "$240", "image_url": "https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?w=800&q=80", "order": 1, "available": True},
-    {"name": "Taza Cerámica MARILÓ", "description": "Hecha a mano por artesanas locales", "price": "$280", "image_url": "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&q=80", "order": 2, "available": True},
-    {"name": "Miel Artesanal 300g", "description": "Miel multifloral de productores cercanos", "price": "$180", "image_url": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=800&q=80", "order": 3, "available": True},
-    {"name": "Mermelada de Higo", "description": "Receta de la casa • Bote de 250ml", "price": "$120", "image_url": "https://images.unsplash.com/photo-1597528380122-1f8b704218b5?w=800&q=80", "order": 4, "available": True},
+    {"name": "Salsa Macha", "description": "Receta de la tía Maye.", "price": "$85", "image_url": "", "order": 1, "available": True},
+    {"name": "Mezcal Espadín Añejo", "description": "Origen: San Lorenzo Albarradas, Oaxaca.", "price": "$578", "image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/of50g9a0_IMG_0966.jpeg", "order": 2, "available": True},
 ]
 
 SAMPLE_GALLERY = [
-    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/api68md5_IMG_4142.jpeg", "caption": "Café con corazón", "order": 1},
-    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/of50g9a0_IMG_0966.jpeg", "caption": "Mezcal artesanal Espadín", "order": 2},
-    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/qooffp3n_IMG_2550.jpeg", "caption": "Merengues hechos a mano", "order": 3},
-    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/q3nerk1k_IMG_5555.jpeg", "caption": "Pastel de nuez con crema batida", "order": 4},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/71m5gneu_Fer%20BONITA.jpeg", "caption": "Fer, hecha a mano", "order": 1},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/x7jspku1_CAFE%20CON%20CORAZO%CC%81N.jpeg", "caption": "Café con corazón", "order": 2},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/rowzz5th_PASTEL%20DE%20NUEZ.jpeg", "caption": "Pastel de nuez", "order": 3},
 ]
 
 
 MENU_SEED_VERSION = "marilo_oaxaca_v3"
-GALLERY_SEED_VERSION = "marilo_gallery_v3"
+GALLERY_SEED_VERSION = "marilo_gallery_v4"
+PRODUCTS_SEED_VERSION = "marilo_products_v2"
 
 
 @app.on_event("startup")
@@ -697,12 +695,15 @@ async def startup_event():
         await db.meta.update_one({"_id": "menu_seed"}, {"$set": {"version": MENU_SEED_VERSION}}, upsert=True)
         logger.info(f"Seeded menu items (version {MENU_SEED_VERSION})")
 
-    # Seed sample products if empty
-    if await db.products.count_documents({}) == 0:
+    # Seed sample products (versioned). On version bump we reseed.
+    pmeta = await db.meta.find_one({"_id": "products_seed"})
+    if not pmeta or pmeta.get("version") != PRODUCTS_SEED_VERSION:
+        await db.products.delete_many({})
         for it in SAMPLE_PRODUCTS:
             obj = Product(**it)
             await db.products.insert_one(obj.model_dump())
-        logger.info("Seeded sample products")
+        await db.meta.update_one({"_id": "products_seed"}, {"$set": {"version": PRODUCTS_SEED_VERSION}}, upsert=True)
+        logger.info(f"Seeded products (version {PRODUCTS_SEED_VERSION})")
 
     # Seed sample gallery (versioned). On version bump we reseed.
     gmeta = await db.meta.find_one({"_id": "gallery_seed"})
