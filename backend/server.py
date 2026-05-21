@@ -575,7 +575,6 @@ SAMPLE_MENU = [
     {"name": "Pasta Marinara", "description": "Fusilli con salsa marinara, verduras y queso mozarella.", "price": "$126", "category": "Especiales", "order": 3},
     {"name": "Fusilli al Cilantro", "description": "Salsa cremosa de cilantro, queso mozarella y tiras de pechuga de pollo.", "price": "$194", "category": "Especiales", "order": 4},
     {"name": "Lasaña", "description": "La tradicional lasaña boloñesa, acompañada de ensalada con aderezo de cilantro.", "price": "$179", "category": "Especiales", "order": 5},
-    {"name": "+ Sopa & bebida", "description": "Acompaña cualquier especial con sopa del día y bebida.", "price": "+$87", "category": "Especiales", "order": 6},
     # BAGUETTES
     {"name": "Oaxaqueña", "description": "Pasta de frijolito, queso manchego y chorizo oaxaqueño.", "price": "$134", "category": "Baguettes", "order": 10},
     {"name": "Yucateca", "description": "Pasta de frijolito, cochinita pibil y queso manchego.", "price": "$146", "category": "Baguettes", "order": 11},
@@ -656,16 +655,16 @@ SAMPLE_PRODUCTS = [
 ]
 
 SAMPLE_GALLERY = [
-    {"image_url": "https://images.unsplash.com/photo-1712630514718-3830cc6c0d0a?w=1200&q=80", "caption": "Nuestra mesa de roble", "order": 1},
-    {"image_url": "https://images.unsplash.com/photo-1578231177134-f1bbe379b054?w=1200&q=80", "caption": "Rincón de lectura", "order": 2},
-    {"image_url": "https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?w=1200&q=80", "caption": "Café & pan recién hecho", "order": 3},
-    {"image_url": "https://images.unsplash.com/photo-1598022186152-1b66e6c38245?w=1200&q=80", "caption": "Cappuccino de la casa", "order": 4},
-    {"image_url": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80", "caption": "Detalles que enamoran", "order": 5},
-    {"image_url": "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=1200&q=80", "caption": "Brunch del fin de semana", "order": 6},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/api68md5_IMG_4142.jpeg", "caption": "Café con corazón", "order": 1},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/of50g9a0_IMG_0966.jpeg", "caption": "Mezcal artesanal Espadín", "order": 2},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/jv3x6mxj_IMG_0752.jpeg", "caption": "El rincón colorido", "order": 3},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/q3nerk1k_IMG_5555.jpeg", "caption": "Pastel de nuez con crema batida", "order": 4},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/qooffp3n_IMG_2550.jpeg", "caption": "Merengues hechos a mano", "order": 5},
 ]
 
 
-MENU_SEED_VERSION = "marilo_oaxaca_v2"
+MENU_SEED_VERSION = "marilo_oaxaca_v3"
+GALLERY_SEED_VERSION = "marilo_gallery_v2"
 
 
 @app.on_event("startup")
@@ -706,12 +705,15 @@ async def startup_event():
             await db.products.insert_one(obj.model_dump())
         logger.info("Seeded sample products")
 
-    # Seed sample gallery if empty
-    if await db.gallery.count_documents({}) == 0:
+    # Seed sample gallery (versioned). On version bump we reseed.
+    gmeta = await db.meta.find_one({"_id": "gallery_seed"})
+    if not gmeta or gmeta.get("version") != GALLERY_SEED_VERSION:
+        await db.gallery.delete_many({})
         for it in SAMPLE_GALLERY:
             obj = GalleryImage(**it)
             await db.gallery.insert_one(obj.model_dump())
-        logger.info("Seeded sample gallery")
+        await db.meta.update_one({"_id": "gallery_seed"}, {"$set": {"version": GALLERY_SEED_VERSION}}, upsert=True)
+        logger.info(f"Seeded gallery (version {GALLERY_SEED_VERSION})")
 
     # Ensure default settings exist
     if not await db.settings.find_one({"_id": "cafe"}):

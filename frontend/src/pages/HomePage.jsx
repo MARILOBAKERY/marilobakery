@@ -6,6 +6,7 @@ import { api, API } from "@/lib/api";
 import SubscribeSection from "@/components/SubscribeSection";
 
 const HERO_IMG = "https://static.prod-images.emergentagent.com/jobs/2c8c7351-1d32-4d6c-aa89-3bc9598401bf/images/b1540473a07df519af6283012d2adb0c5225f0e576585d639754d42ee6aa120f.png";
+const LOGO_IMG = "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/06brbr54_Marilo.png";
 
 // Section background rotation — 4 flat colors
 const SECTION_BG = ["#FFFAF1", "#F5C9CD", "#D5E5EA", "#DDE7CC"];
@@ -73,10 +74,16 @@ export default function HomePage() {
       {/* HERO — cream */}
       <section id="hero" className="bg-[var(--marilo-cream)] pt-24 sm:pt-28 pb-16 sm:pb-20">
         <div className="max-w-6xl mx-auto px-5 sm:px-10 text-center">
-          <p className="tracking-[0.4em] text-[11px] sm:text-xs text-black/60 mb-3 font-semibold uppercase">Cafetería con un toquesito Oaxaqueño</p>
-          <h1 className="font-display text-[5rem] sm:text-[9rem] lg:text-[13rem] leading-[0.85] text-[var(--marilo-coral)] tracking-wide" data-testid="hero-title">
-            MARILÓ
-          </h1>
+          <img
+            src={LOGO_IMG}
+            alt="MARILÓ"
+            data-testid="hero-logo"
+            className="mx-auto w-[16rem] sm:w-[22rem] lg:w-[28rem] h-auto select-none"
+            draggable="false"
+          />
+          <p className="tracking-[0.45em] text-xs sm:text-sm lg:text-base text-black/70 font-semibold uppercase mt-6">
+            Cafetería con un toquesito Oaxaqueño
+          </p>
           <p className="font-script text-2xl sm:text-3xl lg:text-4xl mt-8 max-w-3xl mx-auto leading-snug text-black/85">
             Aquí comes <span className="text-[var(--marilo-coral)]">rico y bonito</span>, te tomas un buen <span className="text-[var(--marilo-coral)]">cafecito</span> y lo acompañas con un rico <span className="text-[var(--marilo-coral)]">postrecito</span>.
           </p>
@@ -122,7 +129,7 @@ export default function HomePage() {
             SABORES QUE ABRAZAN
           </h2>
           <p className="font-script text-xl sm:text-2xl mt-4 max-w-xl mx-auto text-black/75">
-            Comida con corazón, café especial y repostería casera. Auténticamente oaxaqueña.
+            Comida con corazón, café especial y repostería casera.
           </p>
         </div>
 
@@ -130,32 +137,62 @@ export default function HomePage() {
           const items = menu.filter((m) => m.category === cat && m.available);
           const bg = SECTION_BG[ci % 4];
           const accent = CAT_ACCENTS[ci % 4];
+          const isEspeciales = cat.toLowerCase() === "especiales";
           return (
-            <div
-              key={cat}
-              data-testid={`menu-category-${cat.toLowerCase().replace(/[\s&]+/g, "-")}`}
-              style={{ background: bg }}
-            >
-              <div className="max-w-6xl mx-auto px-5 sm:px-10 py-14 sm:py-20">
-                <div className="flex items-baseline gap-5 mb-8">
-                  <h3 className="font-display text-4xl sm:text-6xl tracking-wide leading-none" style={{ color: accent }}>{cat.toUpperCase()}</h3>
-                  <span className="flex-1 h-px bg-black/20" />
-                </div>
-                <ul className="grid sm:grid-cols-2 gap-x-12 gap-y-6">
-                  {items.map((item) => (
-                    <li key={item.id} className="flex items-baseline gap-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline gap-2">
-                          <span className="font-semibold text-base sm:text-lg text-black">{item.name}</span>
-                          <span className="flex-1 border-b border-dotted border-black/30 translate-y-[-3px]" />
-                          <span className="font-bold text-base sm:text-lg text-black whitespace-nowrap">{item.price}</span>
+            <div key={cat}>
+              <div
+                data-testid={`menu-category-${cat.toLowerCase().replace(/[\s&]+/g, "-")}`}
+                style={{ background: bg }}
+              >
+                <div className="max-w-6xl mx-auto px-5 sm:px-10 py-14 sm:py-20">
+                  <div className="flex items-baseline gap-5 mb-8">
+                    <h3 className="font-display text-4xl sm:text-6xl tracking-wide leading-none" style={{ color: accent }}>{cat.toUpperCase()}</h3>
+                    <span className="flex-1 h-px bg-black/20" />
+                  </div>
+                  <ul className="grid sm:grid-cols-2 gap-x-12 gap-y-6">
+                    {items.map((item) => (
+                      <li key={item.id} className="flex items-baseline gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline gap-2">
+                            <span className="font-semibold text-base sm:text-lg text-black">{item.name}</span>
+                            <span className="flex-1 border-b border-dotted border-black/30 translate-y-[-3px]" />
+                            <span className="font-bold text-base sm:text-lg text-black whitespace-nowrap">{item.price}</span>
+                          </div>
+                          {item.description && <p className="text-sm text-black/65 mt-1 leading-snug">{item.description}</p>}
                         </div>
-                        {item.description && <p className="text-sm text-black/65 mt-1 leading-snug">{item.description}</p>}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
+
+              {/* Combo SOPA + BEBIDA banner — entre Especiales y Baguettes */}
+              {isEspeciales && (
+                <div data-testid="combo-sopa-bebida" className="bg-[#fdda25] text-black">
+                  <div className="max-w-6xl mx-auto px-5 sm:px-10 py-14 sm:py-20 grid lg:grid-cols-12 gap-8 sm:gap-10 items-center">
+                    <div className="lg:col-span-5 text-left">
+                      <p className="font-display text-[3.5rem] sm:text-[5rem] lg:text-[6.5rem] leading-[0.85] tracking-tight">
+                        SOPA<br />+<br />BEBIDA
+                      </p>
+                      <p className="font-display text-5xl sm:text-7xl mt-4 text-[var(--marilo-coral)]">
+                        + $87
+                      </p>
+                    </div>
+                    <div className="lg:col-span-7 border-l-0 lg:border-l-2 lg:border-black/80 lg:pl-10">
+                      <p className="tracking-[0.35em] text-[11px] sm:text-xs font-semibold uppercase text-black/70 mb-3">— Combo del día —</p>
+                      <h3 className="font-display text-4xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-wide">
+                        ARMA TU PACK DE COMIDA
+                      </h3>
+                      <p className="mt-6 text-base sm:text-lg leading-relaxed text-black/85 max-w-xl">
+                        Sopa de 225 ml. Bebidas incluidas: <span className="font-bold">sodas, agua mineral, naranjada, limonada</span> o <span className="font-bold">agua embotellada</span>.
+                      </p>
+                      <p className="font-script italic text-lg sm:text-xl mt-4 text-black/70">
+                        Agrega el combo a cualquier platillo y haz tu visita más completa.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
@@ -223,22 +260,51 @@ export default function HomePage() {
       {/* GALLERY — sage */}
       <section id="gallery" data-testid="gallery-section" className="bg-[var(--marilo-sage)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28">
-          <div className="text-center mb-12">
-            <p className="tracking-[0.4em] text-xs text-black/70 font-semibold uppercase">— Galería —</p>
+          <div className="text-center mb-14">
+            <p className="tracking-[0.45em] text-xs text-black/70 font-semibold uppercase mb-3">— Nuestra casa —</p>
+            <h2 className="font-display text-6xl sm:text-8xl lg:text-[9rem] text-black tracking-wide leading-none" data-testid="gallery-title">
+              GALERÍA
+            </h2>
+            <p className="font-script text-xl sm:text-2xl mt-5 max-w-xl mx-auto text-black/80">
+              Detalles, colores y sabores que nos hacen MARILÓ.
+            </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
-            {gallery.map((g, idx) => (
-              <motion.div key={g.id} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: idx * 0.06 }} className={`overflow-hidden bg-white ${idx % 5 === 0 ? "row-span-2 aspect-[3/4] md:aspect-[3/5]" : "aspect-square"}`}>
-                <img src={g.image_url} alt={g.caption} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 auto-rows-[180px] sm:auto-rows-[220px]">
+            {gallery.map((g, idx) => {
+              // mosaic pattern: every 5th tall, every 7th wide
+              const tall = idx % 5 === 0;
+              const wide = idx % 7 === 3;
+              const span = tall ? "row-span-2" : wide ? "col-span-2" : "";
+              return (
+                <motion.div
+                  key={g.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: (idx % 4) * 0.08 }}
+                  className={`overflow-hidden bg-white relative group ${span}`}
+                >
+                  <img
+                    src={g.image_url}
+                    alt={g.caption}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  {g.caption && (
+                    <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <p className="text-white text-xs sm:text-sm font-semibold tracking-wide uppercase">{g.caption}</p>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
             {gallery.length === 0 && (
               <div className="col-span-full bg-white py-16 px-8 text-center">
                 <p className="font-display text-2xl tracking-wide text-black/70">SUBE LAS PRIMERAS FOTOS DESDE EL PANEL ADMIN</p>
               </div>
             )}
           </div>
-          <div className="text-center mt-12">
+          <div className="text-center mt-14">
             <a href={settings?.instagram_url || "#"} target="_blank" rel="noreferrer" data-testid="instagram-follow-btn" className="btn-pill bg-[var(--marilo-coral)] text-white inline-flex items-center gap-3">
               <Instagram className="w-4 h-4" />
               Síguenos {settings?.instagram_handle || "@marilobakerycoffee"}

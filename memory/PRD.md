@@ -44,3 +44,10 @@
 - Replace placeholder cafe info from `/admin/ajustes` with real data (address, hours, phone, IG handle, Google Maps embed).
 - Replace placeholder Unsplash images on the Tiendita with real product photos.
 - Upload first set of recipe PDFs.
+
+
+## Updates (2026-02)
+- Hero: reemplazado título tipográfico "MARILÓ" por el **logo oficial circular rosa** (artifact `Marilo.png`); tagline "CAFETERÍA CON UN TOQUESITO OAXAQUEÑO" movido debajo del logo.
+- **Combo SOPA + BEBIDA + $87** insertado como bloque amarillo entre las categorías "Especiales" y "Baguettes" del menú (texto: "ARMA TU PACK DE COMIDA — Sopa de 225 ml. Bebidas incluidas: sodas, agua mineral, naranjada, limonada o agua embotellada.").
+- Galería: título grande "GALERÍA" agregado, layout en mosaico (col-span/row-span dinámico), 5 nuevas fotografías reales del local (mezcal, latte, interior, pastel, merengues) sembradas vía `GALLERY_SEED_VERSION = marilo_gallery_v2`.
+- Backend `server.py`: nueva constante `GALLERY_SEED_VERSION` con migración automática igual que el menú.
