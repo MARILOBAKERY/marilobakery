@@ -657,14 +657,13 @@ SAMPLE_PRODUCTS = [
 SAMPLE_GALLERY = [
     {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/api68md5_IMG_4142.jpeg", "caption": "Café con corazón", "order": 1},
     {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/of50g9a0_IMG_0966.jpeg", "caption": "Mezcal artesanal Espadín", "order": 2},
-    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/jv3x6mxj_IMG_0752.jpeg", "caption": "El rincón colorido", "order": 3},
+    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/qooffp3n_IMG_2550.jpeg", "caption": "Merengues hechos a mano", "order": 3},
     {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/q3nerk1k_IMG_5555.jpeg", "caption": "Pastel de nuez con crema batida", "order": 4},
-    {"image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/qooffp3n_IMG_2550.jpeg", "caption": "Merengues hechos a mano", "order": 5},
 ]
 
 
 MENU_SEED_VERSION = "marilo_oaxaca_v3"
-GALLERY_SEED_VERSION = "marilo_gallery_v2"
+GALLERY_SEED_VERSION = "marilo_gallery_v3"
 
 
 @app.on_event("startup")

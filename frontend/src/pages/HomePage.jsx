@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Instagram, MapPin, Phone, Clock, Mail, Download, ArrowRight, ChevronDown, Facebook, MessageCircle, Menu as MenuIcon, X, Home } from "lucide-react";
+import { Instagram, MapPin, Phone, Clock, Mail, Download, ArrowRight, ChevronDown, Facebook, MessageCircle, Menu as MenuIcon, X, Home, ChevronLeft, ChevronRight } from "lucide-react";
 import { api, API } from "@/lib/api";
 import SubscribeSection from "@/components/SubscribeSection";
 
-const HERO_IMG = "https://static.prod-images.emergentagent.com/jobs/2c8c7351-1d32-4d6c-aa89-3bc9598401bf/images/b1540473a07df519af6283012d2adb0c5225f0e576585d639754d42ee6aa120f.png";
+const HERO_IMG = "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/jv3x6mxj_IMG_0752.jpeg";
 const LOGO_IMG = "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/06brbr54_Marilo.png";
 
 // Section background rotation — 4 flat colors
@@ -18,6 +18,23 @@ export default function HomePage() {
   const [recipes, setRecipes] = useState([]);
   const [settings, setSettings] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [lightboxIdx, setLightboxIdx] = useState(null);
+
+  const openLightbox = (i) => setLightboxIdx(i);
+  const closeLightbox = () => setLightboxIdx(null);
+  const nextLightbox = () => setLightboxIdx((i) => (i === null ? null : (i + 1) % gallery.length));
+  const prevLightbox = () => setLightboxIdx((i) => (i === null ? null : (i - 1 + gallery.length) % gallery.length));
+
+  useEffect(() => {
+    if (lightboxIdx === null) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowRight") nextLightbox();
+      else if (e.key === "ArrowLeft") prevLightbox();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxIdx, gallery.length]);
 
   useEffect(() => {
     Promise.all([
@@ -169,26 +186,29 @@ export default function HomePage() {
               {/* Combo SOPA + BEBIDA banner — entre Especiales y Baguettes */}
               {isEspeciales && (
                 <div data-testid="combo-sopa-bebida" className="bg-[#fdda25] text-black">
-                  <div className="max-w-6xl mx-auto px-5 sm:px-10 py-14 sm:py-20 grid lg:grid-cols-12 gap-8 sm:gap-10 items-center">
-                    <div className="lg:col-span-5 text-left">
-                      <p className="font-display text-[3.5rem] sm:text-[5rem] lg:text-[6.5rem] leading-[0.85] tracking-tight">
-                        SOPA<br />+<br />BEBIDA
-                      </p>
-                      <p className="font-display text-5xl sm:text-7xl mt-4 text-[var(--marilo-coral)]">
-                        + $87
-                      </p>
-                    </div>
-                    <div className="lg:col-span-7 border-l-0 lg:border-l-2 lg:border-black/80 lg:pl-10">
-                      <p className="tracking-[0.35em] text-[11px] sm:text-xs font-semibold uppercase text-black/70 mb-3">— Combo del día —</p>
-                      <h3 className="font-display text-4xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-wide">
-                        ARMA TU PACK DE COMIDA
+                  <div className="max-w-6xl mx-auto px-5 sm:px-10 py-12 sm:py-16">
+                    <div className="flex items-baseline gap-5 mb-6">
+                      <h3 className="font-display text-4xl sm:text-6xl tracking-wide leading-none text-black">
+                        SOPA + BEBIDA
                       </h3>
-                      <p className="mt-6 text-base sm:text-lg leading-relaxed text-black/85 max-w-xl">
-                        Sopa de 225 ml. Bebidas incluidas: <span className="font-bold">sodas, agua mineral, naranjada, limonada</span> o <span className="font-bold">agua embotellada</span>.
-                      </p>
-                      <p className="font-script italic text-lg sm:text-xl mt-4 text-black/70">
-                        Agrega el combo a cualquier platillo y haz tu visita más completa.
-                      </p>
+                      <span className="flex-1 h-px bg-black/30" />
+                      <span className="font-display text-3xl sm:text-5xl text-[var(--marilo-coral)] whitespace-nowrap">+ $87</span>
+                    </div>
+                    <div className="grid md:grid-cols-12 gap-5 md:gap-8 items-start">
+                      <div className="md:col-span-5">
+                        <p className="tracking-[0.35em] text-[10px] sm:text-[11px] font-semibold uppercase text-black/70 mb-2">— Combo del día —</p>
+                        <h4 className="font-display text-2xl sm:text-3xl leading-tight tracking-wide">
+                          ARMA TU PACK DE COMIDA
+                        </h4>
+                      </div>
+                      <div className="md:col-span-7 md:border-l-2 md:border-black/70 md:pl-8">
+                        <p className="text-base sm:text-lg leading-snug text-black/85">
+                          Sopa de 225 ml. Bebidas incluidas: <span className="font-bold">sodas, agua mineral, naranjada, limonada</span> o <span className="font-bold">agua embotellada</span>.
+                        </p>
+                        <p className="font-script italic text-base sm:text-lg mt-2 text-black/70">
+                          Agrega el combo a cualquier platillo y haz tu visita más completa.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -276,13 +296,16 @@ export default function HomePage() {
               const wide = idx % 7 === 3;
               const span = tall ? "row-span-2" : wide ? "col-span-2" : "";
               return (
-                <motion.div
+                <motion.button
+                  type="button"
+                  onClick={() => openLightbox(idx)}
+                  data-testid={`gallery-item-${idx}`}
                   key={g.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.6, delay: (idx % 4) * 0.08 }}
-                  className={`overflow-hidden bg-white relative group ${span}`}
+                  className={`overflow-hidden bg-white relative group cursor-zoom-in focus:outline-none focus:ring-4 focus:ring-[var(--marilo-coral)] ${span}`}
                 >
                   <img
                     src={g.image_url}
@@ -291,11 +314,11 @@ export default function HomePage() {
                     loading="lazy"
                   />
                   {g.caption && (
-                    <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-left">
                       <p className="text-white text-xs sm:text-sm font-semibold tracking-wide uppercase">{g.caption}</p>
                     </div>
                   )}
-                </motion.div>
+                </motion.button>
               );
             })}
             {gallery.length === 0 && (
@@ -355,6 +378,73 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* LIGHTBOX */}
+      <AnimatePresence>
+        {lightboxIdx !== null && gallery[lightboxIdx] && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4 sm:p-8"
+            onClick={closeLightbox}
+            data-testid="gallery-lightbox"
+          >
+            <button
+              onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+              aria-label="Cerrar"
+              data-testid="lightbox-close"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 text-white flex items-center justify-center rounded-full backdrop-blur-md transition"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            {gallery.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); prevLightbox(); }}
+                  aria-label="Anterior"
+                  data-testid="lightbox-prev"
+                  className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center rounded-full backdrop-blur-md transition"
+                >
+                  <ChevronLeft className="w-7 h-7" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); nextLightbox(); }}
+                  aria-label="Siguiente"
+                  data-testid="lightbox-next"
+                  className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center rounded-full backdrop-blur-md transition"
+                >
+                  <ChevronRight className="w-7 h-7" />
+                </button>
+              </>
+            )}
+            <motion.div
+              key={gallery[lightboxIdx].id}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-5xl max-h-[88vh] w-full flex flex-col items-center"
+            >
+              <img
+                src={gallery[lightboxIdx].image_url}
+                alt={gallery[lightboxIdx].caption}
+                className="max-w-full max-h-[80vh] object-contain shadow-2xl"
+              />
+              {gallery[lightboxIdx].caption && (
+                <p className="mt-4 text-white/90 font-script italic text-base sm:text-lg text-center px-6">
+                  {gallery[lightboxIdx].caption}
+                </p>
+              )}
+              <p className="mt-1 text-white/40 text-[10px] tracking-[0.3em] uppercase">
+                {lightboxIdx + 1} / {gallery.length}
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* WHATSAPP FLOATING */}
       {waLink && (
