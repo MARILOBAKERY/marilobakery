@@ -59,11 +59,44 @@ export default function HomePage() {
 
   const navLinks = [
     { id: "menu", l: "Menú" },
+    { id: "desayunos", l: "Desayunos" },
     { id: "tiendita", l: "Tiendita" },
     { id: "gallery", l: "Galería" },
     { id: "recetas", l: "Estante" },
     { id: "location", l: "Visítanos" },
   ];
+
+  const DESAYUNOS = {
+    categories: [
+      {
+        name: "Desayunos",
+        items: [
+          { name: "CHILAQUILES TRADICIONALES", description: "Salsa verde/roja, crema y queso gratinado", price: "$105" },
+          { name: "HUEVOS AL HORNO", description: "Par de huevos horneados, sobre salsa especial de jitomate, rajas poblanas, granos de elote y queso mozarella gratinado. Acompañados del pan de la casa.", price: "$132" },
+          { name: "QUICHÉ VEGETARIANO", description: "Combinación de champiñones, espinacas, queso mozarella y huevo batido, sobre base crujiente de pay.", price: "$121" },
+          { name: "MOLLETES", description: "Frijoles aromatizados con hoja de aguacate, sobre crujiente baguette horneada en Mariló y queso manchego gratinado.", price: "$99" },
+          { name: "WAFFLES FRUTALES", description: "Mermelada, Crema batida y almendras fileteadas", price: "$116" },
+          { name: "WAFFLES BABUINO", description: "Crema de Avellanas, Plátano y Nueces", price: "$116" },
+          { name: "EMPAREDADO CLÁSICO", description: "A la plancha con jamón de Pierna, queso manchego y pesto, acompañado de una pequeña ensalada de lechuga.", price: "$89" },
+        ],
+      },
+      {
+        name: "Oaxaqueños",
+        items: [
+          { name: "CHILAQUILES ZAACHILA", description: "Coloradito o mole negro, crema y queso gratinado", price: "$115" },
+          { name: "CHILAQUILES MIXES", description: "De frijoles con chintexle (elaborado en metate), crema y queso gratinado", price: "$115" },
+          { name: "TAMALES", description: "Par de tamalitos (Mole o Amarillo) y (Frijol o Chepil)", price: "$132" },
+          { name: "MEMELITAS", description: "3 memelitas con asiento, frijolitos, queso fresco acompañadas con salsita de chile mixe.", price: "$116" },
+        ],
+      },
+    ],
+    adicionales: [
+      "Chorizo Oaxaqueño 80gr +$35",
+      "Tiras Pollo 80gr +$35",
+      "Tasajo 80gr +$45",
+    ],
+    pack: "ARMA TU PACK DE DESAYUNO +$65 — Fruta del día, Café (Americano CH 12oz o Infusión) y del día. Cambia tu café a Latte o Cappuccino por: $15",
+  };
 
   return (
     <div className="relative">
@@ -121,12 +154,12 @@ export default function HomePage() {
                   <button
                     key={m.id}
                     onClick={() => scrollTo(m.id)}
-                    className="text-left py-3 border-b border-white/10 font-script text-2xl text-white"
+                    className="text-left py-3 border-b border-white/10 font-abril text-2xl text-white"
                   >
                     {m.l}
                   </button>
                 ))}
-                <Link to="/admin/login" className="py-3 text-xs uppercase tracking-widest text-white/60">
+                <Link to="/admin/login" className="py-3 text-xs uppercase tracking-widest text-white/60 font-abril">
                   Admin
                 </Link>
               </div>
@@ -137,20 +170,20 @@ export default function HomePage() {
 
       {/* HERO — green left col + image right col */}
       <section id="hero" className="bg-[var(--marilo-green)] text-white pt-20 sm:pt-24">
-        <div className="grid lg:grid-cols-2 min-h-[calc(100vh-5rem)]">
-          <div className="flex flex-col items-center justify-center px-6 sm:px-12 py-16 sm:py-24 text-center">
+        <div className="grid grid-cols-2 min-h-[calc(100vh-5rem)]">
+          <div className="flex flex-col items-center justify-center px-4 sm:px-8 lg:px-12 py-10 sm:py-20 text-center">
             <img
               src={LOGO_IMG}
               alt="MARILÓ"
               data-testid="hero-logo"
-              className="w-40 sm:w-52 lg:w-60 h-auto select-none"
+              className="w-28 sm:w-44 lg:w-60 h-auto select-none"
               draggable="false"
             />
-            <h1 className="font-script text-[2.75rem] sm:text-6xl lg:text-7xl text-[var(--marilo-yellow)] mt-10 leading-tight" data-testid="hero-title">
+            <h1 className="font-script text-3xl sm:text-5xl lg:text-7xl text-[var(--marilo-yellow)] mt-6 sm:mt-10 leading-tight" data-testid="hero-title">
               Toma un cafecito
             </h1>
-            <p className="font-body text-lg sm:text-xl text-white/90 mt-4 italic">
-              y quédate un rato
+            <p className="font-body text-sm sm:text-lg lg:text-xl text-white/90 mt-3 sm:mt-4 italic">
+              y quédate un ratito
             </p>
           </div>
           <div className="relative min-h-[320px] lg:min-h-[auto]">
@@ -161,17 +194,17 @@ export default function HomePage() {
 
       {/* INTRO — soft mint */}
       <section className="bg-[var(--marilo-mint)]">
-        <div className="max-w-6xl mx-auto px-5 sm:px-10 py-16 sm:py-24 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div className="order-2 lg:order-1 text-left">
-            <h2 className="font-script text-4xl sm:text-5xl lg:text-6xl text-[var(--marilo-pink)] leading-tight">
+        <div className="max-w-6xl mx-auto px-5 sm:px-10 py-14 sm:py-24 grid grid-cols-2 gap-6 sm:gap-12 lg:gap-16 items-center">
+          <div className="text-left">
+            <h2 className="font-script text-2xl sm:text-4xl lg:text-6xl text-[var(--marilo-pink)] leading-tight">
               Aquí comes rico y bonito.
             </h2>
-            <p className="font-body text-base sm:text-lg text-black/80 mt-6 leading-relaxed max-w-xl">
+            <p className="font-body text-sm sm:text-base lg:text-lg text-black/80 mt-4 sm:mt-6 leading-relaxed max-w-xl">
               Cocina con toquecito Oaxaqueño, café sin pretensiones desde Zacatepec Mixe. De nuestro horno; pan con masa madre, panqués y nuestro famoso Pay de Manzana.
             </p>
           </div>
-          <div className="order-1 lg:order-2 flex justify-center">
-            <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden shadow-xl">
+          <div className="flex justify-center">
+            <div className="w-36 h-36 sm:w-72 sm:h-72 lg:w-96 lg:h-96 rounded-full overflow-hidden shadow-xl">
               <img src={FER_IMG} alt="Fer, hecha a mano" className="w-full h-full object-cover" />
             </div>
           </div>
@@ -247,6 +280,67 @@ export default function HomePage() {
               </a>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* DESAYUNOS */}
+      <section id="desayunos" data-testid="desayunos-section" className="bg-[var(--marilo-mint-light)]">
+        <div className="max-w-5xl mx-auto px-5 sm:px-10 py-16 sm:py-24">
+          <h2 className="font-script text-5xl sm:text-7xl text-[var(--marilo-pink)] text-center">
+            Desayunos
+          </h2>
+
+          <div className="mt-12 sm:mt-16 space-y-14">
+            {DESAYUNOS.categories.map((cat) => (
+              <div key={cat.name} data-testid={`desayunos-category-${cat.name.toLowerCase()}`}>
+                <h3 className="font-script text-3xl sm:text-4xl text-[var(--marilo-green)] cat-underline mb-6">
+                  {cat.name}
+                </h3>
+                <ul className="divide-y divide-black/5">
+                  {cat.items.map((item) => (
+                    <li key={item.name} className="py-4 flex items-start gap-6">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-body font-semibold uppercase tracking-wider text-black text-[0.95rem] sm:text-base">
+                          {item.name}
+                        </h4>
+                        {item.description && (
+                          <p className="font-body text-sm sm:text-base text-black/65 mt-1 leading-snug">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+                      <span className="font-body font-semibold text-base sm:text-lg text-[var(--marilo-pink)] whitespace-nowrap">
+                        {item.price}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Adicionales */}
+          <div className="mt-10 bg-white/70 rounded-xl p-6 sm:p-7">
+            <h4 className="font-body font-semibold uppercase tracking-wider text-[var(--marilo-green)] text-sm mb-3">
+              Adicionales
+            </h4>
+            <ul className="font-body text-sm sm:text-base text-black/80 space-y-1">
+              {DESAYUNOS.adicionales.map((a) => (
+                <li key={a}>{a}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Pack */}
+          <div
+            data-testid="combo-desayuno"
+            className="mt-6 bg-[var(--marilo-mint)] border-l-4 border-[var(--marilo-yellow)] px-5 py-5 rounded-r-md"
+          >
+            <p className="font-body text-sm sm:text-base text-black/85">
+              <span className="font-bold text-[var(--marilo-green)]">ARMA TU PACK DE DESAYUNO +$65</span>{" "}
+              <span className="text-black/60">—</span> Fruta del día, Café (Americano CH 12oz o Infusión) y del día. Cambia tu café a Latte o Cappuccino por: $15
+            </p>
+          </div>
         </div>
       </section>
 
