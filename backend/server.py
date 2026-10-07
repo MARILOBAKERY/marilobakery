@@ -172,16 +172,16 @@ class ProductCreate(BaseModel):
 
 
 class CafeSettings(BaseModel):
-    address: str = "Transmetropolitana 11, San Andrés Totoltepec, Tlalpan, 14400 Ciudad de México, CDMX, México"
+    address: str = "Av. Transmetropolitana #11, San Andrés Totoltepec, Tlalpan 14400 CDMX"
     phone: str = "+52 56 1984 8299"
     whatsapp: str = "+52 56 1984 8299"
     email: str = "hola@marilo.cafe"
-    hours: str = "Lun - Vie: 8:00 - 20:00\nSáb - Dom: 9:00 - 22:00"
+    hours: str = "Martes a Domingo de 13:30 a 21:00 hrs"
     instagram_url: str = "https://instagram.com/marilobakerycoffee"
     instagram_handle: str = "@marilobakerycoffee"
     facebook_url: str = "https://facebook.com/marilobakerycoffee"
     map_embed_url: str = "https://www.google.com/maps?q=Transmetropolitana+11,+San+Andres+Totoltepec,+Tlalpan,+14400+CDMX&output=embed"
-    tagline: str = "Cafetería con un toquesito Oaxaqueño"
+    tagline: str = "Toma un cafecito y quédate un rato"
 
 
 # ---------------------------------------------------------------
@@ -648,8 +648,8 @@ SAMPLE_MENU = [
 ]
 
 SAMPLE_PRODUCTS = [
-    {"name": "Salsa Macha", "description": "Receta de la tía Maye.", "price": "$85", "image_url": "", "order": 1, "available": True},
-    {"name": "Mezcal Espadín Añejo", "description": "Origen: San Lorenzo Albarradas, Oaxaca.", "price": "$578", "image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/of50g9a0_IMG_0966.jpeg", "order": 2, "available": True},
+    {"name": "Salsa Macha", "description": "Receta de la tía Maye.", "price": "$85", "image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/yvy2kms4_SALSA%20MACHA.jpeg", "order": 1, "available": True},
+    {"name": "Mezcal Espadín", "description": "Origen: San Lorenzo Albarradas, Oaxaca.", "price": "$578", "image_url": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/of50g9a0_IMG_0966.jpeg", "order": 2, "available": True},
 ]
 
 SAMPLE_GALLERY = [
@@ -661,7 +661,23 @@ SAMPLE_GALLERY = [
 
 MENU_SEED_VERSION = "marilo_oaxaca_v3"
 GALLERY_SEED_VERSION = "marilo_gallery_v4"
-PRODUCTS_SEED_VERSION = "marilo_products_v2"
+PRODUCTS_SEED_VERSION = "marilo_products_v4"
+RECIPES_SEED_VERSION = "marilo_recipes_v1"
+
+SAMPLE_RECIPES = [
+    {
+        "title": "Manual Box Galletas",
+        "description": "Nuestra guía completa para preparar el clásico box de galletas de la casa.",
+        "pdf_data": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/vn3ou6lc_Manual%20Box%20Galletas.pdf",
+        "cover_image": "",
+    },
+    {
+        "title": "Búlgaros con Agua",
+        "description": "Cómo cuidar, alimentar y preparar tus búlgaros de agua en casa.",
+        "pdf_data": "https://customer-assets.emergentagent.com/job_cafe-gallery-store/artifacts/b6rydp51_Bu%CC%81lgaros%20Agua.pdf",
+        "cover_image": "",
+    },
+]
 
 
 @app.on_event("startup")
@@ -715,10 +731,27 @@ async def startup_event():
         await db.meta.update_one({"_id": "gallery_seed"}, {"$set": {"version": GALLERY_SEED_VERSION}}, upsert=True)
         logger.info(f"Seeded gallery (version {GALLERY_SEED_VERSION})")
 
-    # Ensure default settings exist
-    if not await db.settings.find_one({"_id": "cafe"}):
-        await db.settings.insert_one({"_id": "cafe", **CafeSettings().model_dump()})
-        logger.info("Seeded default cafe settings")
+    # Seed recetas (versioned) — PDFs alojados como URLs
+    rmeta = await db.meta.find_one({"_id": "recipes_seed"})
+    if not rmeta or rmeta.get("version") != RECIPES_SEED_VERSION:
+        await db.recipes.delete_many({})
+        for it in SAMPLE_RECIPES:
+            obj = Recipe(**it)
+            await db.recipes.insert_one(obj.model_dump())
+        await db.meta.update_one({"_id": "recipes_seed"}, {"$set": {"version": RECIPES_SEED_VERSION}}, upsert=True)
+        logger.info(f"Seeded recipes (version {RECIPES_SEED_VERSION})")
+
+    # Ensure default settings exist / updated to latest version
+    smeta = await db.meta.find_one({"_id": "settings_seed"})
+    SETTINGS_SEED_VERSION = "marilo_settings_v2"
+    if not smeta or smeta.get("version") != SETTINGS_SEED_VERSION:
+        await db.settings.update_one(
+            {"_id": "cafe"},
+            {"$set": CafeSettings().model_dump()},
+            upsert=True,
+        )
+        await db.meta.update_one({"_id": "settings_seed"}, {"$set": {"version": SETTINGS_SEED_VERSION}}, upsert=True)
+        logger.info(f"Seeded settings (version {SETTINGS_SEED_VERSION})")
 
 
 @app.on_event("shutdown")

@@ -1,120 +1,137 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Quicksand:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================
-   MARILÓ — Bohemio Orgánico
-   Mostaza #fdda25 · Rosa coral #E27282
-   Azul polvo #8FBAC5 · Salvia #ADC388
+   MARILÓ — Bakery theme (match marilobakery.com)
+   Verde profundo #2E5F3E · Verde claro #DCE9CF
+   Rosa magenta #FF5097 · Amarillo #FDDA25
    ============================================ */
 
 html, body {
     margin: 0;
     padding: 0;
-    background: #FFFAF1;
-    color: #000;
-    font-family: 'Quicksand', system-ui, -apple-system, sans-serif;
-    font-weight: 500;
+    background: #FFFBF2;
+    color: #222;
+    font-family: 'Lora', Georgia, serif;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
 }
 
 .font-script {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Pacifico', cursive;
     font-weight: 400;
-    font-style: italic;
-    letter-spacing: -0.005em;
-    line-height: 1.25;
+    letter-spacing: 0.005em;
+    line-height: 1.15;
 }
 .font-brush {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 500;
-    font-style: italic;
-    letter-spacing: -0.005em;
-    line-height: 1.25;
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    line-height: 1.15;
 }
 .font-display {
-    font-family: 'Anton', 'Impact', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    font-family: 'Pacifico', cursive;
+    text-transform: none;
+    letter-spacing: 0.005em;
     font-weight: 400;
 }
-.font-serif-display { font-family: 'Anton', sans-serif; text-transform: uppercase; letter-spacing: 0.03em; }
+.font-serif-display {
+    font-family: 'Lora', Georgia, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}
+.font-body {
+    font-family: 'Lora', Georgia, serif;
+}
 
 @layer base {
     :root {
-        --background: 38 100% 97%;          /* #FFFAF1 */
-        --foreground: 0 0% 0%;
+        --background: 42 60% 97%;
+        --foreground: 0 0% 13%;
         --card: 0 0% 100%;
-        --card-foreground: 0 0% 0%;
+        --card-foreground: 0 0% 13%;
         --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 0%;
-        --primary: 351 65% 67%;             /* #E27282 coral */
+        --popover-foreground: 0 0% 13%;
+        --primary: 330 100% 65%;             /* #FF5097 pink */
         --primary-foreground: 0 0% 100%;
-        --secondary: 194 32% 67%;           /* #8FBAC5 dusty blue */
-        --secondary-foreground: 0 0% 0%;
-        --muted: 38 60% 94%;
+        --secondary: 141 36% 28%;            /* #2E5F3E deep green */
+        --secondary-foreground: 0 0% 100%;
+        --muted: 90 36% 86%;                 /* #DCE9CF soft green */
         --muted-foreground: 0 0% 35%;
-        --accent: 51 98% 57%;               /* #fdda25 mustard */
-        --accent-foreground: 0 0% 0%;
+        --accent: 51 98% 57%;                /* #FDDA25 yellow */
+        --accent-foreground: 141 36% 20%;
         --destructive: 0 70% 50%;
         --destructive-foreground: 0 0% 100%;
-        --border: 38 30% 88%;
-        --input: 38 30% 88%;
-        --ring: 351 65% 67%;
-        --radius: 1.5rem;
+        --border: 141 20% 80%;
+        --input: 141 20% 80%;
+        --ring: 330 100% 65%;
+        --radius: 1rem;
 
-        --marilo-yellow: #fdda25;
-        --marilo-coral: #E27282;
-        --marilo-blue: #8FBAC5;
-        --marilo-sage: #ADC388;
-        --marilo-cream: #FFFAF1;
-        --marilo-soft-coral: #F5C9CD;
-        --marilo-soft-blue: #D5E5EA;
-        --marilo-soft-sage: #DDE7CC;
-        --marilo-soft-yellow: #FFEFA0;
+        --marilo-yellow: #FDDA25;
+        --marilo-pink: #FF5097;
+        --marilo-coral: #FF5097;            /* alias to pink */
+        --marilo-green: #2E5F3E;
+        --marilo-green-dark: #244B32;
+        --marilo-mint: #DCE9CF;
+        --marilo-mint-light: #ECF4E2;
+        --marilo-cream: #FFFBF2;
+        --marilo-sage: #DCE9CF;             /* alias */
+        --marilo-blue: #DCE9CF;             /* alias */
+        --marilo-soft-coral: #FFD9EA;
     }
 }
 
 @layer base {
     * { @apply border-border; }
     body { @apply bg-background text-foreground; }
-    h1, h2, h3, h4 { font-family: 'Anton', 'Impact', sans-serif; text-transform: uppercase; letter-spacing: 0.02em; font-weight: 400; }
+    h1, h2, h3 { font-family: 'Pacifico', cursive; font-weight: 400; text-transform: none; letter-spacing: 0.005em; }
+    h4, h5 { font-family: 'Lora', serif; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
 }
 
-/* Flat section blocks — sharp corners, no shadows */
-.soft-card {
-    background: #fff;
-    border-radius: 0;
-    box-shadow: none;
-}
+/* Cards flat */
+.soft-card { background: #fff; border-radius: 0.75rem; box-shadow: none; }
 .soft-card:hover { transform: none; }
+.tinted-card { border-radius: 0.75rem; box-shadow: none; }
 
-.tinted-card {
-    border-radius: 0;
-    box-shadow: none;
-}
-
-/* Pretty pill button */
+/* Pill button */
 .btn-pill {
     border-radius: 999px;
-    padding: 0.85rem 1.75rem;
-    font-family: 'Quicksand', sans-serif;
+    padding: 0.9rem 2rem;
+    font-family: 'Lora', serif;
     font-weight: 600;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     transition: all 0.25s ease;
 }
 .btn-pill:hover { transform: translateY(-2px); box-shadow: 0 10px 18px -8px rgba(0,0,0,0.2); }
 
+/* Yellow underline for category names (like reference) */
+.cat-underline {
+    position: relative;
+    display: inline-block;
+}
+.cat-underline::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: -4px;
+    height: 3px;
+    background: var(--marilo-yellow);
+    border-radius: 2px;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--marilo-soft-coral); }
-::-webkit-scrollbar-thumb { background: var(--marilo-coral); border-radius: 8px; border: 2px solid #fff; }
+::-webkit-scrollbar-track { background: var(--marilo-mint); }
+::-webkit-scrollbar-thumb { background: var(--marilo-green); border-radius: 8px; border: 2px solid var(--marilo-mint); }
 
-::selection { background: var(--marilo-yellow); color: #000; }
+::selection { background: var(--marilo-yellow); color: var(--marilo-green); }
 
-:focus-visible { outline: 3px solid var(--marilo-coral); outline-offset: 3px; border-radius: 6px; }
+:focus-visible { outline: 3px solid var(--marilo-pink); outline-offset: 3px; border-radius: 6px; }
