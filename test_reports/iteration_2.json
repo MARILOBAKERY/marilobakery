@@ -1,0 +1,29 @@
+{
+  "summary": "MARILÓ Café redesign validation (fork iteration 2). Backend: 16/16 pytest cases pass against public URL - all CRUD, auth, and NEW seed defaults verified (hours 'Martes a Domingo de 13:30 a 21:00', address 'Transmetropolitana', 2 products incl. Mezcal Espadín $578 & Salsa Macha $85, 3 gallery items, 2 recipes Galletas + Búlgaros). Frontend: homepage renders new design (Pacifico script titles, pink/green/yellow palette) with all required sections (hero split, 'Aquí comes rico y bonito' mint section, Menu with 11 categories + combo-sopa-bebida banner, Tiendita with 2 product cards & prices, Galería 3-image mosaic with working lightbox incl. ESC & arrow nav & '2 / 3' counter, Estante with 2 recipe cards, Visítanos with correct hours/address/WhatsApp 56 1984 8299, floating WhatsApp button). Mobile 390x844: no horizontal overflow, mobile menu button visible. Admin login (admin@marilo.cafe / admin123) works and lands on /admin dashboard successfully.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Admin Dashboard - Top Productos", "issues": ["Analytics widget displays '(eliminado)' entries for products that existed under previous seed versions but were replaced during the v4 seed bump. Historical view-count data references deleted product IDs. Cosmetic only - no functional impact."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_marilo_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "(Optional) In admin dashboard Top Productos widget, filter out or relabel entries whose product_id no longer exists in products collection to hide '(eliminado)' rows."
+  ],
+  "critical_code_review_comments": [
+    "Seed versioning scheme (MENU_SEED_VERSION, GALLERY_SEED_VERSION='marilo_gallery_v4', etc.) correctly triggers re-seed on bump - verified new defaults active.",
+    "Review request mentions testids 'nav-shop' and 'nav-recipes' but actual rendered testids are 'nav-tiendita' and 'nav-recetas' (Spanish ids). Not a bug - review request wording is stale. All nav testids present and visible.",
+    "Lightbox keyboard handling (ESC + arrow nav) works; '2 / 3' counter format confirmed.",
+    "Recipes list endpoint still excludes pdf_data payload (verified).",
+    "Previous iteration's AdminDashboard NavLink relative-path bug appears fixed - sidebar renders all sections and navigation lands at /admin cleanly after login."
+  ],
+  "updated_files": ["/app/backend/tests/test_marilo_api.py"],
+  "success_rate": {"backend": "100% (16/16)", "frontend": "100% core flows"},
+  "test_credentials": "admin@marilo.cafe / admin123 (verified working)",
+  "seed_data_creation": "None persisted (CRUD tests create TEST_* items and clean up).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend tests at /app/backend/tests/test_marilo_api.py - 16 tests covering public endpoints, auth, menu/products/gallery/recipes CRUD, settings update, and NEW redesign defaults (hours/address/product names). Run: pytest /app/backend/tests/test_marilo_api.py -v. Public homepage testid IDs: nav-home, nav-menu, nav-tiendita, nav-gallery, nav-recetas, nav-location, nav-admin, mobile-menu-btn, hero-logo, hero-title, menu-section, combo-sopa-bebida, tiendita-section, product-card-{id}, gallery-section, gallery-item-{idx}, gallery-lightbox, lightbox-close, lightbox-prev, lightbox-next, recipe-shelf-section, recipe-download-btn-{n}, location-map, instagram-follow-btn, whatsapp-floating-btn, menu-whatsapp, tiendita-whatsapp."
+}

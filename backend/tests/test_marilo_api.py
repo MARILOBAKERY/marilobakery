@@ -46,18 +46,34 @@ def test_menu_seeded(session):
 def test_products_seeded(session):
     r = session.get(f"{API}/products")
     assert r.status_code == 200
-    assert len(r.json()) >= 4
+    data = r.json()
+    assert len(data) >= 2
+    names = [p["name"] for p in data]
+    assert "Mezcal Espadín" in names, f"Expected Mezcal Espadín in products, got {names}"
+    assert "Salsa Macha" in names, f"Expected Salsa Macha in products, got {names}"
 
 def test_gallery_seeded(session):
     r = session.get(f"{API}/gallery")
     assert r.status_code == 200
-    assert len(r.json()) >= 6
+    assert len(r.json()) >= 3
 
 def test_settings_default(session):
     r = session.get(f"{API}/settings")
     assert r.status_code == 200
     d = r.json()
     assert "address" in d and "instagram_url" in d
+    # New defaults from redesign
+    assert "Transmetropolitana" in d.get("address", ""), f"address default: {d.get('address')}"
+    assert "Martes a Domingo" in d.get("hours", ""), f"hours default: {d.get('hours')}"
+
+def test_recipes_seeded(session):
+    r = session.get(f"{API}/recipes")
+    assert r.status_code == 200
+    data = r.json()
+    assert len(data) >= 2, f"expected >=2 recipes, got {len(data)}"
+    titles = [x["title"] for x in data]
+    assert any("Galletas" in t for t in titles)
+    assert any("Búlgaros" in t for t in titles)
 
 
 # -------- Auth --------
