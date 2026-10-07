@@ -20,7 +20,7 @@ from fastapi import FastAPI, APIRouter, HTTPException, Request, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, field_validator
 
 
 # MongoDB
@@ -348,7 +348,15 @@ async def root():
 class SubscribeRequest(BaseModel):
     email: EmailStr
     name: str = ""
-    phone: str = ""
+    phone: str
+
+    @field_validator("phone")
+    @classmethod
+    def _phone_required(cls, v: str) -> str:
+        digits = "".join(ch for ch in (v or "") if ch.isdigit())
+        if len(digits) < 8:
+            raise ValueError("Teléfono inválido")
+        return v.strip()
 
 
 def _gen_coupon() -> str:

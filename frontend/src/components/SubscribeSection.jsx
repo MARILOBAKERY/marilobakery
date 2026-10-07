@@ -51,7 +51,7 @@ export default function SubscribeSection() {
             <form onSubmit={submit} className="flex flex-col gap-3 max-w-md mx-auto">
               <input type="text" placeholder="Tu nombre (opcional)" value={name} onChange={(e) => setName(e.target.value)} data-testid="subscribe-name" className="w-full px-5 py-3.5 bg-white text-black placeholder:text-black/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--marilo-pink)]" />
               <input type="email" required placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} data-testid="subscribe-email" className="w-full px-5 py-3.5 bg-white text-black placeholder:text-black/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--marilo-pink)]" />
-              <input type="tel" placeholder="Tu teléfono (opcional)" value={phone} onChange={(e) => setPhone(e.target.value)} data-testid="subscribe-phone" className="w-full px-5 py-3.5 bg-white text-black placeholder:text-black/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--marilo-pink)]" />
+              <input type="tel" required placeholder="Tu teléfono (WhatsApp)" value={phone} onChange={(e) => setPhone(e.target.value)} data-testid="subscribe-phone" className="w-full px-5 py-3.5 bg-white text-black placeholder:text-black/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--marilo-pink)]" />
               <button type="submit" disabled={loading} data-testid="subscribe-submit" className="btn-pill bg-[var(--marilo-pink)] text-white inline-flex items-center justify-center gap-2 disabled:opacity-60">
                 {loading ? (<><Loader2 className="w-4 h-4 animate-spin" /> Enviando…</>) : (<><Gift className="w-4 h-4" /> Quiero mi café gratis</>)}
               </button>
