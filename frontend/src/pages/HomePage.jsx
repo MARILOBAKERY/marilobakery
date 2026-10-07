@@ -66,42 +66,10 @@ export default function HomePage() {
     { id: "location", l: "Visítanos" },
   ];
 
-  const DESAYUNOS = {
-    categories: [
-      {
-        name: "Desayunos",
-        items: [
-          { name: "CHILAQUILES TRADICIONALES", description: "Salsa verde/roja, crema y queso gratinado", price: "$105" },
-          { name: "HUEVOS AL HORNO", description: "Par de huevos horneados, sobre salsa especial de jitomate, rajas poblanas, granos de elote y queso mozarella gratinado. Acompañados del pan de la casa.", price: "$132" },
-          { name: "QUICHÉ VEGETARIANO", description: "Combinación de champiñones, espinacas, queso mozarella y huevo batido, sobre base crujiente de pay.", price: "$121" },
-          { name: "MOLLETES", description: "Frijoles aromatizados con hoja de aguacate, sobre crujiente baguette horneada en Mariló y queso manchego gratinado.", price: "$99" },
-          { name: "WAFFLES FRUTALES", description: "Mermelada, Crema batida y almendras fileteadas", price: "$116" },
-          { name: "WAFFLES BABUINO", description: "Crema de Avellanas, Plátano y Nueces", price: "$116" },
-          { name: "EMPAREDADO CLÁSICO", description: "A la plancha con jamón de Pierna, queso manchego y pesto, acompañado de una pequeña ensalada de lechuga.", price: "$89" },
-        ],
-      },
-      {
-        name: "Oaxaqueños",
-        items: [
-          { name: "CHILAQUILES ZAACHILA", description: "Coloradito o mole negro, crema y queso gratinado", price: "$115" },
-          { name: "CHILAQUILES MIXES", description: "De frijoles con chintexle (elaborado en metate), crema y queso gratinado", price: "$115" },
-          { name: "TAMALES", description: "Par de tamalitos (Mole o Amarillo) y (Frijol o Chepil)", price: "$132" },
-          { name: "MEMELITAS", description: "3 memelitas con asiento, frijolitos, queso fresco acompañadas con salsita de chile mixe.", price: "$116" },
-        ],
-      },
-    ],
-    adicionales: [
-      "Chorizo Oaxaqueño 80gr +$35",
-      "Tiras Pollo 80gr +$35",
-      "Tasajo 80gr +$45",
-    ],
-    pack: "ARMA TU PACK DE DESAYUNO +$65 — Fruta del día, Café (Americano CH 12oz o Infusión) y del día. Cambia tu café a Latte o Cappuccino por: $15",
-  };
-
   return (
     <div className="relative">
-      {/* NAV — dark green */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-[var(--marilo-green)] text-white">
+      {/* NAV — dark green header */}
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-[var(--marilo-nav)] text-white">
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-3 flex items-center justify-between">
           <button
             onClick={() => scrollTo("hero")}
@@ -124,13 +92,6 @@ export default function HomePage() {
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              to="/admin/login"
-              className="hidden sm:inline text-[10px] uppercase tracking-widest text-white/50 hover:text-[var(--marilo-yellow)]"
-              data-testid="nav-admin"
-            >
-              Admin
-            </Link>
             <button
               onClick={() => setMobileOpen((v) => !v)}
               className="md:hidden p-2 -mr-2 text-white"
@@ -159,9 +120,6 @@ export default function HomePage() {
                     {m.l}
                   </button>
                 ))}
-                <Link to="/admin/login" className="py-3 text-xs uppercase tracking-widest text-white/60 font-abril">
-                  Admin
-                </Link>
               </div>
             </motion.div>
           )}
@@ -218,11 +176,29 @@ export default function HomePage() {
             Menú
           </h2>
 
+          {/* ARMA TU PACK DE COMIDA — llamativo, arriba */}
+          <div data-testid="combo-sopa-bebida" className="mt-10 sm:mt-14 rounded-2xl overflow-hidden shadow-lg">
+            <div className="bg-[var(--marilo-pink)] text-white px-6 sm:px-10 py-6 sm:py-8 flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-8">
+              <div className="flex-shrink-0 flex sm:flex-col items-center sm:items-start justify-center gap-3 sm:gap-1 text-center sm:text-left sm:border-r-2 sm:border-white/30 sm:pr-8">
+                <p className="font-script text-3xl sm:text-5xl text-[var(--marilo-yellow)] leading-none">
+                  Arma tu pack
+                </p>
+                <p className="font-body font-bold text-3xl sm:text-5xl text-white leading-none">+$87</p>
+              </div>
+              <div className="flex-1 text-center sm:text-left">
+                <p className="font-body font-bold uppercase tracking-wider text-sm sm:text-base text-[var(--marilo-yellow)]">
+                  De comida
+                </p>
+                <p className="font-body text-sm sm:text-base text-white/95 mt-1 leading-snug">
+                  Sopa 225 ml + bebida (sodas, agua mineral, naranjada, limonada o agua embotellada). Agrégalo a cualquier platillo.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="mt-12 sm:mt-16 space-y-14">
-            {categories.map((cat, ci) => {
+            {categories.filter((c) => !["desayunos", "oaxaqueños", "oaxaquenos"].includes(c.toLowerCase())).map((cat) => {
               const items = menu.filter((m) => m.category === cat && m.available);
-              const isEspeciales = cat.toLowerCase() === "especiales";
-              const isPizzas = cat.toLowerCase() === "pizzas";
               return (
                 <div key={cat} data-testid={`menu-category-${cat.toLowerCase().replace(/[\s&]+/g, "-")}`}>
                   <h3 className="font-script text-3xl sm:text-4xl text-[var(--marilo-green)] cat-underline mb-6">
@@ -247,19 +223,6 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
-
-                  {/* Arma tu pack — después de Pizzas */}
-                  {isPizzas && (
-                    <div
-                      data-testid="combo-sopa-bebida"
-                      className="mt-6 bg-[var(--marilo-mint-light)] border-l-4 border-[var(--marilo-yellow)] px-5 py-4 rounded-r-md"
-                    >
-                      <p className="font-body text-sm sm:text-base text-black/85">
-                        <span className="font-bold text-[var(--marilo-green)]">Arma tu pack +$87</span>{" "}
-                        <span className="text-black/60">—</span> Sopa 225 ml + bebida (sodas, agua mineral, naranjada, limonada o agua embotellada).
-                      </p>
-                    </div>
-                  )}
                 </div>
               );
             })}
@@ -283,40 +246,64 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* DESAYUNOS */}
+      {/* DESAYUNOS — datos editables desde admin (categorías: Desayunos, Oaxaqueños) */}
       <section id="desayunos" data-testid="desayunos-section" className="bg-[var(--marilo-mint-light)]">
         <div className="max-w-5xl mx-auto px-5 sm:px-10 py-16 sm:py-24">
           <h2 className="font-script text-5xl sm:text-7xl text-[var(--marilo-pink)] text-center">
             Desayunos
           </h2>
 
-          <div className="mt-12 sm:mt-16 space-y-14">
-            {DESAYUNOS.categories.map((cat) => (
-              <div key={cat.name} data-testid={`desayunos-category-${cat.name.toLowerCase()}`}>
-                <h3 className="font-script text-3xl sm:text-4xl text-[var(--marilo-green)] cat-underline mb-6">
-                  {cat.name}
-                </h3>
-                <ul className="divide-y divide-black/5">
-                  {cat.items.map((item) => (
-                    <li key={item.name} className="py-4 flex items-start gap-6">
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-body font-semibold uppercase tracking-wider text-black text-[0.95rem] sm:text-base">
-                          {item.name}
-                        </h4>
-                        {item.description && (
-                          <p className="font-body text-sm sm:text-base text-black/65 mt-1 leading-snug">
-                            {item.description}
-                          </p>
-                        )}
-                      </div>
-                      <span className="font-body font-semibold text-base sm:text-lg text-[var(--marilo-pink)] whitespace-nowrap">
-                        {item.price}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+          {/* ARMA TU PACK DE DESAYUNO — llamativo, arriba */}
+          <div data-testid="combo-desayuno" className="mt-10 sm:mt-14 rounded-2xl overflow-hidden shadow-lg">
+            <div className="bg-[var(--marilo-pink)] text-white px-6 sm:px-10 py-6 sm:py-8 flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-8">
+              <div className="flex-shrink-0 flex sm:flex-col items-center sm:items-start justify-center gap-3 sm:gap-1 text-center sm:text-left sm:border-r-2 sm:border-white/30 sm:pr-8">
+                <p className="font-script text-3xl sm:text-5xl text-[var(--marilo-yellow)] leading-none">
+                  Arma tu pack
+                </p>
+                <p className="font-body font-bold text-3xl sm:text-5xl text-white leading-none">+$65</p>
               </div>
-            ))}
+              <div className="flex-1 text-center sm:text-left">
+                <p className="font-body font-bold uppercase tracking-wider text-sm sm:text-base text-[var(--marilo-yellow)]">
+                  De desayuno
+                </p>
+                <p className="font-body text-sm sm:text-base text-white/95 mt-1 leading-snug">
+                  Fruta del día, Café (Americano CH 12 oz o Infusión) y del día. Cambia tu café a Latte o Cappuccino por $15.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 sm:mt-16 space-y-14">
+            {["Desayunos", "Oaxaqueños"].map((cat) => {
+              const items = menu.filter((m) => m.category.toLowerCase() === cat.toLowerCase() && m.available);
+              if (items.length === 0) return null;
+              return (
+                <div key={cat} data-testid={`desayunos-category-${cat.toLowerCase()}`}>
+                  <h3 className="font-script text-3xl sm:text-4xl text-[var(--marilo-green)] cat-underline mb-6">
+                    {cat}
+                  </h3>
+                  <ul className="divide-y divide-black/5">
+                    {items.map((item) => (
+                      <li key={item.id} className="py-4 flex items-start gap-6">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-body font-semibold uppercase tracking-wider text-black text-[0.95rem] sm:text-base">
+                            {item.name}
+                          </h4>
+                          {item.description && (
+                            <p className="font-body text-sm sm:text-base text-black/65 mt-1 leading-snug">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                        <span className="font-body font-semibold text-base sm:text-lg text-[var(--marilo-pink)] whitespace-nowrap">
+                          {item.price}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
 
           {/* Adicionales */}
@@ -325,21 +312,10 @@ export default function HomePage() {
               Adicionales
             </h4>
             <ul className="font-body text-sm sm:text-base text-black/80 space-y-1">
-              {DESAYUNOS.adicionales.map((a) => (
-                <li key={a}>{a}</li>
-              ))}
+              <li>Chorizo Oaxaqueño 80gr +$35</li>
+              <li>Tiras Pollo 80gr +$35</li>
+              <li>Tasajo 80gr +$45</li>
             </ul>
-          </div>
-
-          {/* Pack */}
-          <div
-            data-testid="combo-desayuno"
-            className="mt-6 bg-[var(--marilo-mint)] border-l-4 border-[var(--marilo-yellow)] px-5 py-5 rounded-r-md"
-          >
-            <p className="font-body text-sm sm:text-base text-black/85">
-              <span className="font-bold text-[var(--marilo-green)]">ARMA TU PACK DE DESAYUNO +$65</span>{" "}
-              <span className="text-black/60">—</span> Fruta del día, Café (Americano CH 12oz o Infusión) y del día. Cambia tu café a Latte o Cappuccino por: $15
-            </p>
           </div>
         </div>
       </section>
@@ -474,34 +450,45 @@ export default function HomePage() {
           </p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-12">
-            {recipes.map((r, idx) => {
-              const emoji = r.title.toLowerCase().includes("búlgaros") || r.title.toLowerCase().includes("bulgaros")
-                ? (r.title.toLowerCase().includes("leche") ? "🥛" : "💧")
-                : "📦";
-              return (
-                <a
-                  key={r.id}
-                  href={`${API}/recipes/${r.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    api.post("/track", { type: "recipe_download", ref_id: r.id }).catch(() => {});
-                    const res = await api.get(`/recipes/${r.id}`);
-                    const url = res.data.pdf_data;
-                    if (url.startsWith("data:")) {
-                      const a = document.createElement("a");
-                      a.href = url;
-                      a.download = `${r.title}.pdf`;
-                      a.click();
-                    } else {
-                      window.open(url, "_blank", "noopener,noreferrer");
-                    }
-                  }}
-                  data-testid={`recipe-download-btn-${idx + 1}`}
-                  className="group bg-white rounded-xl p-6 flex flex-col items-start border-2 border-transparent hover:border-[var(--marilo-pink)] transition shadow-sm"
-                >
-                  <span className="text-4xl mb-3">{emoji}</span>
+            {recipes.map((r, idx) => (
+              <a
+                key={r.id}
+                href={`${API}/recipes/${r.id}`}
+                target="_blank"
+                rel="noreferrer"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  api.post("/track", { type: "recipe_download", ref_id: r.id }).catch(() => {});
+                  const res = await api.get(`/recipes/${r.id}`);
+                  const url = res.data.pdf_data;
+                  if (url.startsWith("data:")) {
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `${r.title}.pdf`;
+                    a.click();
+                  } else {
+                    window.open(url, "_blank", "noopener,noreferrer");
+                  }
+                }}
+                data-testid={`recipe-download-btn-${idx + 1}`}
+                className="group bg-white rounded-xl overflow-hidden flex flex-col border-2 border-transparent hover:border-[var(--marilo-pink)] transition shadow-sm"
+              >
+                <div className="aspect-[4/3] overflow-hidden bg-[var(--marilo-mint-light)] relative">
+                  {r.cover_image ? (
+                    <img
+                      src={r.cover_image}
+                      alt={r.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-6">
+                      <p className="font-script text-5xl text-[var(--marilo-pink)]/30 leading-none">Mariló</p>
+                      <p className="font-body uppercase tracking-widest text-xs text-[var(--marilo-green)]/60 mt-3">Receta</p>
+                    </div>
+                  )}
+                </div>
+                <div className="p-5 flex-1 flex flex-col">
                   <h3 className="font-body font-semibold uppercase tracking-wider text-black text-base leading-tight">
                     {r.title}
                   </h3>
@@ -513,9 +500,9 @@ export default function HomePage() {
                   <span className="inline-flex items-center gap-2 text-[var(--marilo-pink)] text-xs uppercase tracking-wider font-semibold mt-4 group-hover:gap-3 transition">
                     Descargar PDF <Download className="w-4 h-4" />
                   </span>
-                </a>
-              );
-            })}
+                </div>
+              </a>
+            ))}
             {recipes.length === 0 && (
               <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-xl py-16 px-8 text-center">
                 <p className="font-script text-3xl text-black/70">Recetas próximamente…</p>
@@ -530,13 +517,13 @@ export default function HomePage() {
       {/* VISÍTANOS — green */}
       <section id="location" className="bg-[var(--marilo-green)] text-white">
         <div className="max-w-5xl mx-auto px-5 sm:px-10 py-16 sm:py-24">
-          <h2 className="font-script text-5xl sm:text-7xl text-[var(--marilo-yellow)] text-center">
+          <h2 className="font-body font-bold italic text-5xl sm:text-7xl text-[var(--marilo-yellow)] text-center">
             Visítanos
           </h2>
 
           <div className="text-center mt-10 space-y-3">
             {settings?.hours && (
-              <p className="font-script text-2xl sm:text-3xl text-[var(--marilo-yellow)]">
+              <p className="font-body font-bold text-2xl sm:text-3xl text-[var(--marilo-yellow)]">
                 Horarios: {settings.hours}
               </p>
             )}

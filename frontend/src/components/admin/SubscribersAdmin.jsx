@@ -46,8 +46,8 @@ export default function SubscribersAdmin() {
   };
 
   const exportCsv = () => {
-    const rows = [["email", "nombre", "cupón", "email_enviado", "canjeado", "fecha_canje", "fecha_alta"]];
-    items.forEach((s) => rows.push([s.email, s.name || "", s.coupon || "", s.email_sent ? "sí" : "no", s.redeemed ? "sí" : "no", s.redeemed_at || "", s.created_at || ""]));
+    const rows = [["email", "nombre", "teléfono", "cupón", "email_enviado", "canjeado", "fecha_canje", "fecha_alta"]];
+    items.forEach((s) => rows.push([s.email, s.name || "", s.phone || "", s.coupon || "", s.email_sent ? "sí" : "no", s.redeemed ? "sí" : "no", s.redeemed_at || "", s.created_at || ""]));
     const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const a = document.createElement("a");
@@ -120,6 +120,7 @@ export default function SubscribersAdmin() {
             <TableRow>
               <TableHead>Email</TableHead>
               <TableHead>Nombre</TableHead>
+              <TableHead>Teléfono</TableHead>
               <TableHead>Cupón</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Estado</TableHead>
@@ -132,6 +133,7 @@ export default function SubscribersAdmin() {
               <TableRow key={s.id}>
                 <TableCell className="font-medium">{s.email}</TableCell>
                 <TableCell>{s.name || "—"}</TableCell>
+                <TableCell>{s.phone || "—"}</TableCell>
                 <TableCell><span className="font-mono text-xs bg-muted px-2 py-1 rounded">{s.coupon}</span></TableCell>
                 <TableCell>{s.email_sent ? <Mail className="w-4 h-4 text-secondary" /> : <span className="text-xs text-muted-foreground">no enviado</span>}</TableCell>
                 <TableCell>
@@ -146,7 +148,7 @@ export default function SubscribersAdmin() {
               </TableRow>
             ))}
             {items.length === 0 && (
-              <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-10 italic">Aún no hay suscriptores. ¡Pronto llegarán!</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-10 italic">Aún no hay suscriptores. ¡Pronto llegarán!</TableCell></TableRow>
             )}
           </TableBody>
         </Table>

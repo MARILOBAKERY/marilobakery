@@ -348,6 +348,7 @@ async def root():
 class SubscribeRequest(BaseModel):
     email: EmailStr
     name: str = ""
+    phone: str = ""
 
 
 def _gen_coupon() -> str:
@@ -390,6 +391,7 @@ async def subscribe(req: SubscribeRequest):
         "id": str(uuid.uuid4()),
         "email": email,
         "name": req.name.strip(),
+        "phone": req.phone.strip(),
         "coupon": coupon,
         "email_sent": False,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -569,6 +571,19 @@ logger = logging.getLogger(__name__)
 # Startup: seed admin and sample data
 # ---------------------------------------------------------------
 SAMPLE_MENU = [
+    # DESAYUNOS
+    {"name": "CHILAQUILES TRADICIONALES", "description": "Salsa verde/roja, crema y queso gratinado", "price": "$105", "category": "Desayunos", "order": 1},
+    {"name": "HUEVOS AL HORNO", "description": "Par de huevos horneados, sobre salsa especial de jitomate, rajas poblanas, granos de elote y queso mozarella gratinado. Acompañados del pan de la casa.", "price": "$132", "category": "Desayunos", "order": 2},
+    {"name": "QUICHÉ VEGETARIANO", "description": "Combinación de champiñones, espinacas, queso mozarella y huevo batido, sobre base crujiente de pay.", "price": "$121", "category": "Desayunos", "order": 3},
+    {"name": "MOLLETES", "description": "Frijoles aromatizados con hoja de aguacate, sobre crujiente baguette horneada en Mariló y queso manchego gratinado.", "price": "$99", "category": "Desayunos", "order": 4},
+    {"name": "WAFFLES FRUTALES", "description": "Mermelada, Crema batida y almendras fileteadas", "price": "$116", "category": "Desayunos", "order": 5},
+    {"name": "WAFFLES BABUINO", "description": "Crema de Avellanas, Plátano y Nueces", "price": "$116", "category": "Desayunos", "order": 6},
+    {"name": "EMPAREDADO CLÁSICO", "description": "A la plancha con jamón de Pierna, queso manchego y pesto, acompañado de una pequeña ensalada de lechuga.", "price": "$89", "category": "Desayunos", "order": 7},
+    # OAXAQUEÑOS (desayunos)
+    {"name": "CHILAQUILES ZAACHILA", "description": "Coloradito o mole negro, crema y queso gratinado", "price": "$115", "category": "Oaxaqueños", "order": 1},
+    {"name": "CHILAQUILES MIXES", "description": "De frijoles con chintexle (elaborado en metate), crema y queso gratinado", "price": "$115", "category": "Oaxaqueños", "order": 2},
+    {"name": "TAMALES", "description": "Par de tamalitos (Mole o Amarillo) y (Frijol o Chepil)", "price": "$132", "category": "Oaxaqueños", "order": 3},
+    {"name": "MEMELITAS", "description": "3 memelitas con asiento, frijolitos, queso fresco acompañadas con salsita de chile mixe.", "price": "$116", "category": "Oaxaqueños", "order": 4},
     # ESPECIALES
     {"name": "Quiché Vegetariano", "description": "Champiñones, espinacas, queso mozarella y huevo batido sobre una crujiente base para pay.", "price": "$121", "category": "Especiales", "order": 1},
     {"name": "Quiché de Atún", "description": "Atún, aceitunas, zanahoria, queso mozarella y huevo batido sobre una crujiente base para pay.", "price": "$136", "category": "Especiales", "order": 2},
@@ -659,7 +674,7 @@ SAMPLE_GALLERY = [
 ]
 
 
-MENU_SEED_VERSION = "marilo_oaxaca_v3"
+MENU_SEED_VERSION = "marilo_oaxaca_v4"
 GALLERY_SEED_VERSION = "marilo_gallery_v4"
 PRODUCTS_SEED_VERSION = "marilo_products_v4"
 RECIPES_SEED_VERSION = "marilo_recipes_v1"
