@@ -177,19 +177,19 @@ export default function HomePage() {
           </h2>
 
           {/* ARMA TU PACK DE COMIDA — llamativo, arriba */}
-          <div data-testid="combo-sopa-bebida" className="mt-10 sm:mt-14 rounded-2xl overflow-hidden shadow-lg">
-            <div className="bg-[var(--marilo-pink)] text-white px-6 sm:px-10 py-6 sm:py-8 flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-8">
-              <div className="flex-shrink-0 flex sm:flex-col items-center sm:items-start justify-center gap-3 sm:gap-1 text-center sm:text-left sm:border-r-2 sm:border-white/30 sm:pr-8">
-                <p className="font-script text-3xl sm:text-5xl text-[var(--marilo-yellow)] leading-none">
-                  Arma tu pack
+          <div data-testid="combo-sopa-bebida" className="mt-8 sm:mt-12 rounded-2xl overflow-hidden shadow-lg max-w-3xl mx-auto">
+            <div className="bg-[var(--marilo-pink)] text-white px-5 sm:px-8 py-5 sm:py-6 flex flex-col sm:flex-row items-center sm:items-stretch gap-3 sm:gap-6">
+              <div className="flex-shrink-0 flex sm:flex-col items-center sm:items-start justify-center gap-3 sm:gap-1 text-center sm:text-left sm:border-r-2 sm:border-white/30 sm:pr-6">
+                <p className="font-script text-2xl sm:text-4xl text-[var(--marilo-yellow)] leading-none">
+                  Pack Comida
                 </p>
-                <p className="font-body font-bold text-3xl sm:text-5xl text-white leading-none">+$87</p>
+                <p className="font-body font-bold text-2xl sm:text-4xl text-white leading-none">+$87</p>
               </div>
               <div className="flex-1 text-center sm:text-left">
-                <p className="font-body font-bold uppercase tracking-wider text-sm sm:text-base text-[var(--marilo-yellow)]">
-                  De comida
+                <p className="font-body font-bold uppercase tracking-wider text-xs sm:text-sm text-[var(--marilo-yellow)]">
+                  Incluye
                 </p>
-                <p className="font-body text-sm sm:text-base text-white/95 mt-1 leading-snug">
+                <p className="font-body text-xs sm:text-sm text-white/95 mt-1 leading-snug">
                   Sopa 225 ml + bebida (sodas, agua mineral, naranjada, limonada o agua embotellada). Agrégalo a cualquier platillo.
                 </p>
               </div>
@@ -254,19 +254,19 @@ export default function HomePage() {
           </h2>
 
           {/* ARMA TU PACK DE DESAYUNO — llamativo, arriba */}
-          <div data-testid="combo-desayuno" className="mt-10 sm:mt-14 rounded-2xl overflow-hidden shadow-lg">
-            <div className="bg-[var(--marilo-pink)] text-white px-6 sm:px-10 py-6 sm:py-8 flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-8">
-              <div className="flex-shrink-0 flex sm:flex-col items-center sm:items-start justify-center gap-3 sm:gap-1 text-center sm:text-left sm:border-r-2 sm:border-white/30 sm:pr-8">
-                <p className="font-script text-3xl sm:text-5xl text-[var(--marilo-yellow)] leading-none">
-                  Arma tu pack
+          <div data-testid="combo-desayuno" className="mt-8 sm:mt-12 rounded-2xl overflow-hidden shadow-lg max-w-3xl mx-auto">
+            <div className="bg-[var(--marilo-pink)] text-white px-5 sm:px-8 py-5 sm:py-6 flex flex-col sm:flex-row items-center sm:items-stretch gap-3 sm:gap-6">
+              <div className="flex-shrink-0 flex sm:flex-col items-center sm:items-start justify-center gap-3 sm:gap-1 text-center sm:text-left sm:border-r-2 sm:border-white/30 sm:pr-6">
+                <p className="font-script text-2xl sm:text-4xl text-[var(--marilo-yellow)] leading-none">
+                  Pack Desayuno
                 </p>
-                <p className="font-body font-bold text-3xl sm:text-5xl text-white leading-none">+$65</p>
+                <p className="font-body font-bold text-2xl sm:text-4xl text-white leading-none">+$65</p>
               </div>
               <div className="flex-1 text-center sm:text-left">
-                <p className="font-body font-bold uppercase tracking-wider text-sm sm:text-base text-[var(--marilo-yellow)]">
-                  De desayuno
+                <p className="font-body font-bold uppercase tracking-wider text-xs sm:text-sm text-[var(--marilo-yellow)]">
+                  Incluye
                 </p>
-                <p className="font-body text-sm sm:text-base text-white/95 mt-1 leading-snug">
+                <p className="font-body text-xs sm:text-sm text-white/95 mt-1 leading-snug">
                   Fruta del día, Café (Americano CH 12 oz o Infusión) y del día. Cambia tu café a Latte o Cappuccino por $15.
                 </p>
               </div>
