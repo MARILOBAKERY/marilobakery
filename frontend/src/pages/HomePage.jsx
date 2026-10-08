@@ -120,6 +120,14 @@ export default function HomePage() {
                     {m.l}
                   </button>
                 ))}
+                <Link
+                  to="/admin/login"
+                  onClick={() => setMobileOpen(false)}
+                  data-testid="mobile-nav-admin"
+                  className="mt-6 pb-3 text-[10px] tracking-[0.3em] uppercase text-white/40 font-light self-center"
+                >
+                  Admin
+                </Link>
               </div>
             </motion.div>
           )}
