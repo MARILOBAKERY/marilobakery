@@ -79,7 +79,7 @@ export default function HomePage() {
           >
             <img src={LOGO_IMG} alt="MARILÓ" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
           </button>
-          <div className="hidden md:flex items-center gap-8 lg:gap-10">
+          <div className="hidden items-center gap-8 lg:gap-10">
             {navLinks.map((n) => (
               <button
                 key={n.id}
@@ -94,7 +94,7 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden p-2 -mr-2 text-white"
+              className="p-2 -mr-2 text-white"
               aria-label="Menú"
               data-testid="mobile-menu-btn"
             >
@@ -108,7 +108,7 @@ export default function HomePage() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden bg-[var(--marilo-green-dark)]"
+              className="overflow-hidden bg-[var(--marilo-green-dark)]"
             >
               <div className="px-5 py-3 flex flex-col">
                 {navLinks.map((m) => (
