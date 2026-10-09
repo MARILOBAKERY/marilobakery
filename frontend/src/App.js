@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import HomePage from "@/pages/HomePage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
+import AvisoPrivacidad from "@/pages/AvisoPrivacidad";
 import InstallPWA from "@/components/InstallPWA";
 
 const ProtectedRoute = ({ children }) => {
@@ -21,6 +22,8 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/aviso-de-privacidad" element={<AvisoPrivacidad />} />
+            <Route path="/politica-de-privacidad" element={<AvisoPrivacidad />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin/*"
