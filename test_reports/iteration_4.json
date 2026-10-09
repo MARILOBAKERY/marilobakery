@@ -1,0 +1,34 @@
+{
+  "summary": "Iteration 4 — Backend-only validation of /api/subscribe WhatsApp wiring + admin /api/subscribers. Created /app/backend/tests/test_whatsapp_subscribe.py covering phone validation (422), subscribe happy path with Meta-error-tolerance, idempotency, admin list auth + shape, and env wiring. 9/9 tests passed. Meta returns 131030 (recipient not in allowed list) for fake test numbers 55000000xx — this is expected behavior for the current test WABA and the endpoint handles it gracefully: subscriber is persisted with whatsapp_sent=false and whatsapp_error populated; endpoint still returns 200 with coupon. No real messages were sent to +525619848299.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_whatsapp_subscribe.py",
+    "/app/test_reports/pytest/pytest_whatsapp_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "subscribe endpoint correctly persists subscriber even when Meta returns an error (good resilience).",
+    "Idempotency on duplicate email returns original coupon without re-sending WhatsApp — prevents spam/abuse (good).",
+    "/api/subscribers correctly excludes mongo _id and requires Bearer admin auth.",
+    "WHATSAPP_TOKEN is stored in plaintext in /app/backend/.env — fine for preview but should move to secret manager in production.",
+    "Meta currently returns 131030 (recipient not in allowed list) for fake test numbers rather than 132001; the review_request assumed 132001 but endpoint handles both identically via generic error branch — no code change needed."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_whatsapp_subscribe.py (new)"
+  ],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "not tested (backend-only scope)"},
+  "test_credentials": "admin@marilo.cafe / admin123",
+  "seed_data_creation": "Created ~5 wa-test-*@example.com subscribers with phones 5500000001-5500000003 in db.subscribers; main agent can purge via /api/subscribers DELETE or by email prefix 'wa-test-'.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "WhatsApp integration is wired correctly end-to-end. Only Meta-side configuration (link a real phone to the Marilo WABA 1642716790879260, OR approve the cupon_bienvenida template on the test WABA that owns PHONE_ID 1428213377039718) blocks real template delivery. Fake numbers now return 131030 'recipient not in allowed list' because the test WABA is in dev mode. The endpoint behavior is correct and does not need code changes.",
+  "rca of the issue": "Not a bug — Meta configuration limitation. The provided WHATSAPP_PHONE_ID 1428213377039718 is attached to a dev-mode test WABA that (a) has no approved cupon_bienvenida template, and (b) only accepts messages to allow-listed numbers. The /app/backend/server.py _send_whatsapp_coupon() correctly logs the error, returns {ok:false, error:...}, and the subscribe handler persists whatsapp_sent=false + whatsapp_error so admin can follow up manually. Mitigation (owner side, not code): either (1) add a real phone number to the Marilo WABA 1642716790879260 and update WHATSAPP_PHONE_ID, or (2) submit cupon_bienvenida template for approval on the test WABA."
+}
