@@ -13,6 +13,7 @@ from typing import List, Optional
 import jwt
 import bcrypt
 import asyncio
+import httpx
 import secrets
 import string
 import resend
@@ -37,6 +38,11 @@ ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
 
 # Resend (email)
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+WHATSAPP_TOKEN = os.environ.get('WHATSAPP_TOKEN', '')
+WHATSAPP_PHONE_ID = os.environ.get('WHATSAPP_PHONE_ID', '')
+WHATSAPP_TEMPLATE = os.environ.get('WHATSAPP_TEMPLATE', 'cupon_bienvenida_m')
+WHATSAPP_TEMPLATE_LANGUAGE = os.environ.get('WHATSAPP_TEMPLATE_LANGUAGE', 'es_MX')
+WHATSAPP_GRAPH_VERSION = os.environ.get('WHATSAPP_GRAPH_VERSION', 'v21.0')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
 CAFE_NAME = os.environ.get('CAFE_NAME', 'MARILÓ')
 if RESEND_API_KEY:
@@ -363,6 +369,72 @@ def _gen_coupon() -> str:
     return "MARILO-" + "".join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
 
+def _format_mx_phone(raw: str) -> Optional[str]:
+    """Normaliza a E.164 México (+52 + 10 dígitos). Retorna None si inválido."""
+    digits = "".join(ch for ch in (raw or "") if ch.isdigit())
+    if digits.startswith("00"):
+        digits = digits[2:]
+    if digits.startswith("52"):
+        national = digits[2:]
+        # Tolera prefijo histórico "521" para móviles México
+        if len(national) == 11 and national.startswith("1"):
+            national = national[1:]
+    else:
+        if digits.startswith(("01", "044", "045")):
+            return None
+        national = digits
+    if len(national) != 10:
+        return None
+    return "+52" + national
+
+
+async def _send_whatsapp_coupon(phone_e164: str, name: str, coupon: str) -> dict:
+    """Envía la plantilla de WhatsApp Business con nombre y cupón.
+    Retorna {ok, message_id?, error?}. No lanza excepciones."""
+    if not WHATSAPP_TOKEN or not WHATSAPP_PHONE_ID:
+        return {"ok": False, "error": "whatsapp_not_configured"}
+    url = f"https://graph.facebook.com/{WHATSAPP_GRAPH_VERSION}/{WHATSAPP_PHONE_ID}/messages"
+    greet = (name or "").strip() or "amig@ MARILÓ"
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": phone_e164,
+        "type": "template",
+        "template": {
+            "name": WHATSAPP_TEMPLATE,
+            "language": {"code": WHATSAPP_TEMPLATE_LANGUAGE},
+            "components": [{
+                "type": "body",
+                "parameters": [
+                    {"type": "text", "parameter_name": "nombre_cliente", "text": greet},
+                    {"type": "text", "parameter_name": "codigo_cupon", "text": coupon},
+                ],
+            }],
+        },
+    }
+    headers = {
+        "Authorization": f"Bearer {WHATSAPP_TOKEN}",
+        "Content-Type": "application/json",
+    }
+    try:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(10.0, connect=5.0)) as client:
+            r = await client.post(url, headers=headers, json=payload)
+        if r.status_code < 400:
+            body = r.json()
+            msg_id = (body.get("messages") or [{}])[0].get("id")
+            return {"ok": True, "message_id": msg_id}
+        body = {}
+        try:
+            body = r.json()
+        except Exception:
+            body = {"raw": r.text[:300]}
+        logger.error(f"WhatsApp send error {r.status_code}: {body}")
+        return {"ok": False, "status": r.status_code, "error": body.get("error", body)}
+    except Exception as e:
+        logger.exception("WhatsApp send exception")
+        return {"ok": False, "error": str(e)}
+
+
 def _build_coupon_html(name: str, coupon: str) -> str:
     greet = name.strip() or "amiga/o de MARILÓ"
     return f"""
@@ -395,15 +467,32 @@ async def subscribe(req: SubscribeRequest):
         return {"ok": True, "already_subscribed": True, "coupon": existing.get("coupon", "")}
 
     coupon = _gen_coupon()
+    phone_e164 = _format_mx_phone(req.phone)
     doc = {
         "id": str(uuid.uuid4()),
         "email": email,
         "name": req.name.strip(),
         "phone": req.phone.strip(),
+        "phone_e164": phone_e164 or "",
         "coupon": coupon,
         "email_sent": False,
+        "whatsapp_sent": False,
+        "whatsapp_message_id": "",
+        "whatsapp_error": "",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
+
+    # Enviar cupón por WhatsApp Business API
+    if phone_e164:
+        wa = await _send_whatsapp_coupon(phone_e164, req.name, coupon)
+        if wa.get("ok"):
+            doc["whatsapp_sent"] = True
+            doc["whatsapp_message_id"] = wa.get("message_id") or ""
+        else:
+            err = wa.get("error")
+            doc["whatsapp_error"] = str(err)[:500] if err else "unknown"
+    else:
+        doc["whatsapp_error"] = "invalid_phone_format"
 
     if RESEND_API_KEY:
         params = {
@@ -419,7 +508,13 @@ async def subscribe(req: SubscribeRequest):
             logger.error(f"Resend failed: {e}")
             # We still save the subscriber so admin can follow up manually
     await db.subscribers.insert_one(doc)
-    return {"ok": True, "already_subscribed": False, "coupon": coupon, "email_sent": doc["email_sent"]}
+    return {
+        "ok": True,
+        "already_subscribed": False,
+        "coupon": coupon,
+        "email_sent": doc["email_sent"],
+        "whatsapp_sent": doc["whatsapp_sent"],
+    }
 
 
 @api_router.get("/subscribers")
