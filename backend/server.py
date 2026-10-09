@@ -406,8 +406,8 @@ async def _send_whatsapp_coupon(phone_e164: str, name: str, coupon: str) -> dict
             "components": [{
                 "type": "body",
                 "parameters": [
-                    {"type": "text", "parameter_name": "nombre_cliente", "text": greet},
-                    {"type": "text", "parameter_name": "codigo_cupon", "text": coupon},
+                    {"type": "text", "text": greet},
+                    {"type": "text", "text": coupon},
                 ],
             }],
         },
