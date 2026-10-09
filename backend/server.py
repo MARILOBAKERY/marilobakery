@@ -18,6 +18,7 @@ import secrets
 import string
 import resend
 from fastapi import FastAPI, APIRouter, HTTPException, Request, Depends, status
+from fastapi.responses import FileResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -656,7 +657,25 @@ async def analytics_overview(current=Depends(get_current_admin)):
 # ---------------------------------------------------------------
 # App configuration
 # ---------------------------------------------------------------
+@api_router.get("/download/netlify-build")
+async def download_netlify_build():
+    return FileResponse(
+        "/app/backend/static_dl/marilo-netlify.zip",
+        media_type="application/zip",
+        filename="marilo-netlify.zip",
+    )
+
+
 app.include_router(api_router)
+
+
+@app.get("/download/marilo-netlify.zip")
+async def download_netlify_build_alt():
+    return FileResponse(
+        "/app/backend/static_dl/marilo-netlify.zip",
+        media_type="application/zip",
+        filename="marilo-netlify.zip",
+    )
 
 app.add_middleware(
     CORSMiddleware,
